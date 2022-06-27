@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#ffab91</color>
+    <color name="colorPrimaryDark">#c97b63</color>
+    <color name="colorAccent">#ffddc1</color>
+
+    <color name="daynight_textColor">#000000</color>
+
+    <color name="switchColor">#911DEE</color>
+
+    <color name="daynight_icon_Color">#9C27B0</color>
+
+</resources>

@@ -1,0 +1,34 @@
+<resources>
+
+
+    <!-- Base application theme. values-night.xml -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/futura_bold</item>
+        <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
+    </style>
+
+    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@android:anim/fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityCloseExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+    <style name="MyDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert"/>
+
+    <style name="MySwitch">
+        <item name="colorControlActivated">@color/switchColor</item>
+    </style>
+
+    <style name="AppTheme.Button" parent="Widget.AppCompat.Button">
+        <item name="colorButtonNormal">@color/switchColor</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+</resources>
