@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.core.view.GravityCompat
-import com.bumptech.glide.util.Util
 import com.example.esportslogomaker.R
 import com.example.esportslogomaker.customCallBack.TemplateClickCallBack
 import com.example.esportslogomaker.databinding.ActivityMainBinding
@@ -103,6 +102,19 @@ class MainActivity : AppCompatActivity(), TemplateClickCallBack {
             true
         }
 
+        mainBinding.navView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.navigation_home -> {
+                    Constant.showToast(this, "calling Home")
+                }
+                R.id.navigation_my_work -> {
+                    Constant.showToast(this, "calling My work")
+                }
+
+            }
+            return@setOnItemSelectedListener true
+        }
+
         workerHandler.post {
             mainBinding.homeUi.updateUI(this@MainActivity)
         }
@@ -117,7 +129,7 @@ class MainActivity : AppCompatActivity(), TemplateClickCallBack {
     }
 
     override fun onItemClickListener(labelStatus: Boolean) {
-        Constant.showToast(this,"calling")
+        Constant.showToast(this, "calling")
     }
 
 
