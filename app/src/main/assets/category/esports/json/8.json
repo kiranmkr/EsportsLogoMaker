@@ -1,0 +1,52 @@
+{
+	"AbsoluteLayout": {
+		"ImageView": [
+			{
+				"_android:id": "@+id/imageView16",
+				"_android:layout_width": "300dp",
+				"_android:layout_height": "300dp",
+				"_android:layout_x": "0dp",
+				"_android:layout_y": "0dp",
+				"_app:srcCompat": "@drawable/_0"
+			},
+			{
+				"_android:id": "@+id/imageView17",
+				"_android:layout_width": "179dp",
+				"_android:layout_height": "182dp",
+				"_android:layout_x": "49dp",
+				"_android:layout_y": "42dp",
+				"_app:srcCompat": "@drawable/_1"
+			}
+		],
+		"TextView": [
+			{
+				"_android:id": "@+id/textView",
+				"_android:layout_width": "wrap_content",
+				"_android:layout_height": "wrap_content",
+				"_android:layout_x": "46dp",
+				"_android:layout_y": "217dp",
+				"_android:fontFamily": "@font/trebuchet",
+				"_android:text": "Mascots Logo",
+				"_android:textColor": "#E50000",
+				"_android:textSize": "35sp"
+			},
+			{
+				"_android:id": "@+id/textView2",
+				"_android:layout_width": "wrap_content",
+				"_android:layout_height": "wrap_content",
+				"_android:layout_x": "110dp",
+				"_android:layout_y": "259dp",
+				"_android:fontFamily": "@font/bree_bold",
+				"_android:letterSpacing": "0.5",
+				"_android:text": "LAGLINE",
+				"_android:textColor": "#FEA621",
+				"_android:textSize": "10sp"
+			}
+		],
+		"_xmlns:android": "http://schemas.android.com/apk/res/android",
+		"_xmlns:app": "http://schemas.android.com/apk/res-auto",
+		"_android:layout_width": "300dp",
+		"_android:layout_height": "300dp",
+		"_android:background": "@color/white"
+	}
+}

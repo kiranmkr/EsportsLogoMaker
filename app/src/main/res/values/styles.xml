@@ -20,16 +20,5 @@
         <item name="android:activityCloseExitAnimation">@android:anim/fade_out</item>
     </style>
 
-    <style name="MyDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert" />
-
-    <style name="MySwitch">
-        <item name="colorControlActivated">@color/switchColor</item>
-    </style>
-
-    <style name="AppTheme.Button" parent="Widget.AppCompat.Button">
-        <item name="colorButtonNormal">@color/switchColor</item>
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
 
 </resources>

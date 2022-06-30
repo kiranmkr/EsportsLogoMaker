@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
 
-    <files-path name="@strings/temp_images" path="."/>
+    <files-path
+        name="@strings/temp_images"
+        path="." />
 
     <external-path
         name="external"

@@ -7,38 +7,75 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/containter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorOnPrimary">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/daynight_background">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                android:minHeight="?attr/actionBarSize"
-                app:titleTextColor="@android:color/white" />
-        </LinearLayout>
+                android:text="@string/app_name"
+                android:textColor="@color/daynight_textColor"
+                android:textSize="@dimen/_16sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_menu"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_marginStart="16dp"
+                android:contentDescription="@string/images"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_round_menu" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tool_bar">
+
+            <com.example.esportslogomaker.customUi.HomeUi
+                android:id="@+id/home_ui"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
-        style="@style/Widget.Custom.NavigationView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:clipToPadding="false"
         app:headerLayout="@layout/nav_header_main"
+        app:itemIconTint="@color/colorAccent"
+        app:itemTextColor="@color/daynight_textColor"
         app:menu="@menu/main_menu" />
 
 

@@ -1,0 +1,51 @@
+{
+	"AbsoluteLayout": {
+		"ImageView": [
+			{
+				"_android:id": "@+id/imageView4",
+				"_android:layout_width": "300dp",
+				"_android:layout_height": "300dp",
+				"_android:layout_x": "0dp",
+				"_android:layout_y": "0dp",
+				"_app:srcCompat": "@drawable/_0"
+			},
+			{
+				"_android:id": "@+id/imageView5",
+				"_android:layout_width": "223dp",
+				"_android:layout_height": "238dp",
+				"_android:layout_x": "38dp",
+				"_android:layout_y": "30dp",
+				"_app:srcCompat": "@drawable/_1"
+			}
+		],
+		"TextView": [
+			{
+				"_android:id": "@+id/textView",
+				"_android:layout_width": "wrap_content",
+				"_android:layout_height": "wrap_content",
+				"_android:layout_x": "100dp",
+				"_android:layout_y": "186dp",
+				"_android:fontFamily": "@font/jersey_w54",
+				"_android:text": "GAMING",
+				"_android:textColor": "#E0CFA1",
+				"_android:textSize": "35sp"
+			},
+			{
+				"_android:id": "@+id/textView3",
+				"_android:layout_width": "wrap_content",
+				"_android:layout_height": "wrap_content",
+				"_android:layout_x": "127dp",
+				"_android:layout_y": "218dp",
+				"_android:fontFamily": "@font/jersey_w54",
+				"_android:text": "TEAM",
+				"_android:textColor": "#E0CFA1",
+				"_android:textSize": "20sp"
+			}
+		],
+		"_xmlns:android": "http://schemas.android.com/apk/res/android",
+		"_xmlns:app": "http://schemas.android.com/apk/res-auto",
+		"_android:layout_width": "300dp",
+		"_android:layout_height": "300dp",
+		"_android:background": "@color/white"
+	}
+}

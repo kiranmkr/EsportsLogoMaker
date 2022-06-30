@@ -2,9 +2,11 @@
 <resources>
     <color name="colorPrimary">#526066</color>
     <color name="colorPrimaryDark">#444E54</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="daynight_textColor">#FFFFFF</color>
-    <color name="switchColor">#BC2F1D</color>
+    <color name="colorAccent">#A8C7FA</color>
 
-    <color name="daynight_icon_Color">#526066</color>
+    <color name="daynight_background">#1F1F1F</color>
+    <color name="daynight_textColor">#999FA6</color>
+
+    <color name="daynight_item_background">#000000</color>
+
 </resources>

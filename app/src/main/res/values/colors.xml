@@ -3,12 +3,12 @@
 
     <color name="colorPrimary">#ffab91</color>
     <color name="colorPrimaryDark">#c97b63</color>
-    <color name="colorAccent">#ffddc1</color>
+    <color name="colorAccent">#FDBF8C</color>
 
+    <color name="daynight_background">#FFFFFF</color>
     <color name="daynight_textColor">#000000</color>
 
-    <color name="switchColor">#911DEE</color>
+    <color name="daynight_item_background">#FFFFFF</color>
 
-    <color name="daynight_icon_Color">#9C27B0</color>
 
 </resources>

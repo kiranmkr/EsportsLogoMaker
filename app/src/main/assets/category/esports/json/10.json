@@ -1,0 +1,51 @@
+{
+	"AbsoluteLayout": {
+		"ImageView": [
+			{
+				"_android:id": "@+id/imageView18",
+				"_android:layout_width": "300dp",
+				"_android:layout_height": "300dp",
+				"_android:layout_x": "0dp",
+				"_android:layout_y": "0dp",
+				"_app:srcCompat": "@drawable/_0"
+			},
+			{
+				"_android:id": "@+id/imageView19",
+				"_android:layout_width": "164dp",
+				"_android:layout_height": "190dp",
+				"_android:layout_x": "67dp",
+				"_android:layout_y": "18dp",
+				"_app:srcCompat": "@drawable/_1"
+			}
+		],
+		"TextView": [
+			{
+				"_android:id": "@+id/textView",
+				"_android:layout_width": "wrap_content",
+				"_android:layout_height": "wrap_content",
+				"_android:layout_x": "97dp",
+				"_android:layout_y": "208dp",
+				"_android:fontFamily": "@font/evil_empire",
+				"_android:text": "Tiger",
+				"_android:textColor": "#E50000",
+				"_android:textSize": "45sp"
+			},
+			{
+				"_android:id": "@+id/textView2",
+				"_android:layout_width": "wrap_content",
+				"_android:layout_height": "wrap_content",
+				"_android:layout_x": "106dp",
+				"_android:layout_y": "251dp",
+				"_android:fontFamily": "@font/bree_bold",
+				"_android:text": "W  A  R  R  I  O  R  S",
+				"_android:textColor": "#FEA621",
+				"_android:textSize": "10sp"
+			}
+		],
+		"_xmlns:android": "http://schemas.android.com/apk/res/android",
+		"_xmlns:app": "http://schemas.android.com/apk/res-auto",
+		"_android:layout_width": "300dp",
+		"_android:layout_height": "300dp",
+		"_android:background": "@color/white"
+	}
+}
