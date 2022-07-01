@@ -3,7 +3,7 @@
 
     <color name="colorPrimary">#ffab91</color>
     <color name="colorPrimaryDark">#c97b63</color>
-    <color name="colorAccent">#FDBF8C</color>
+    <color name="colorAccent">#FF7300</color>
 
     <color name="daynight_background">#FFFFFF</color>
     <color name="daynight_textColor">#656566</color>
