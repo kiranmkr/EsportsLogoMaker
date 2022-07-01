@@ -52,7 +52,7 @@
 }
 -keep class kotlin.Metadata { *; }
 -keep class kotlin.reflect.** { *; }
--keep class com.example.logodesign.datamodel.** { *; }
+-keep class com.example.esportslogomaker.datamodel.** { *; }
 -keepclasseswithmembers class * {
     public <init>(android.content.Context, android.util.AttributeSet, int);
 }
@@ -183,7 +183,7 @@
 -keep class org.wysaid.nativePort.** { *; }
 -keep class org.webrtc.** { *; }
 
--keep class com.example.logodesign.dataModel.** { *; }
+-keep class com.example.esportslogomaker.dataModel.** { *; }
 
 # rename the source files to something meaningless, but it must be retained
 

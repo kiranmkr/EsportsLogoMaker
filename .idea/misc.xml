@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable-v24/bold_state.xml" value="0.248" />
+        <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable-v24/ic_check.xml" value="0.248" />
+        <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable-v24/ic_clear.xml" value="0.248" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable-v24/image_placeholder.xml" value="0.248" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable-v24/images.xml" value="0.248" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable-v24/ripple.xml" value="0.248" />
@@ -21,6 +23,7 @@
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/container_flip.xml" value="0.248" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/default_boarder.xml" value="0.248" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/gray_boarder.xml" value="0.248" />
+        <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/ic_clear.xml" value="0.248" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/ic_round_contact_mail.xml" value="0.248" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/ic_round_home.xml" value="0.248" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/ic_round_insert_drive_file.xml" value="0.248" />
@@ -58,6 +61,7 @@
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/underline_state.xml" value="0.248" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/activity_editing_screen.xml" value="0.2421875" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/activity_main.xml" value="0.2421875" />
+        <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/add_text_dialog.xml" value="0.2421875" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/custom_shape_ui.xml" value="0.24114583333333334" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/font_container_text.xml" value="0.536" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/home_ui.xml" value="0.4" />

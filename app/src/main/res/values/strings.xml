@@ -37,5 +37,7 @@
     <string name="color">Color</string>
     <string name="text_style">Text Style</string>
 
+    <string name="type_here">Type Here</string>
+
 
 </resources>
