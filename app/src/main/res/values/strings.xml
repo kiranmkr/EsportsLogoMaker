@@ -18,4 +18,24 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
+    <string name="import_shape">Import\nShape</string>
+    <string name="import_sticker">Import\nSticker</string>
+
+    <string name="pdf">PDF</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="layers">Layers</string>
+    <string name="sticker">Stickers</string>
+    <string name="add_text">Add Text</string>
+
+    <string name="opacity">Opacity</string>
+    <string name="shapes">Shapes</string>
+    <string name="change_text">Change Text</string>
+
+    <string name="font">Font</string>
+    <string name="size">Size</string>
+    <string name="color">Color</string>
+    <string name="text_style">Text Style</string>
+
+
 </resources>
