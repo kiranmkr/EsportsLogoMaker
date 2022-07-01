@@ -12,4 +12,10 @@
     <string name="home">Home</string>
     <string name="my_work">My Work</string>
 
+    <string name="are_you_sure">Are you sure you want to exit the app?</string>
+    <string name="are_you_sure_editing">Are you sure you want to exit Editing Screen?</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
 </resources>

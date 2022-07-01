@@ -1,19 +1,24 @@
 package com.example.esportslogomaker.ui
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.core.view.GravityCompat
 import com.example.esportslogomaker.R
 import com.example.esportslogomaker.customCallBack.TemplateClickCallBack
 import com.example.esportslogomaker.databinding.ActivityMainBinding
 import com.example.esportslogomaker.utils.Constant
 import com.example.esportslogomaker.utils.FeedbackUtils
+import pub.devrel.easypermissions.AppSettingsDialog
+import pub.devrel.easypermissions.EasyPermissions
 
-class MainActivity : AppCompatActivity(), TemplateClickCallBack {
+class MainActivity : AppCompatActivity(), TemplateClickCallBack,
+    EasyPermissions.PermissionCallbacks {
 
     private lateinit var mainBinding: ActivityMainBinding
 
@@ -124,13 +129,58 @@ class MainActivity : AppCompatActivity(), TemplateClickCallBack {
         if (mainBinding.drawer.isDrawerOpen(GravityCompat.START)) {
             mainBinding.drawer.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            showBackDialog()
         }
     }
 
-    override fun onItemClickListener(labelStatus: Boolean) {
-        Constant.showToast(this, "calling")
+    private fun showBackDialog() {
+
+        AlertDialog.Builder(this@MainActivity)
+            .setMessage(getString(R.string.are_you_sure))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                super.onBackPressed()
+            }
+            .setNegativeButton(getString(R.string.no), null)
+            .show()
+
     }
 
+    override fun onItemClickListener(labelStatus: Boolean) {
+        if (EasyPermissions.hasPermissions(this, *Constant.readPermission)) {
+            openEditingScreen()
+        } else {
+            EasyPermissions.requestPermissions(
+                this, "We need permissions because this and that",
+                Constant.PICK_IMAGE, *Constant.readPermission
+            )
+        }
+    }
+
+    private fun openEditingScreen() {
+        val intent = Intent(this, EditingScreen::class.java)
+        startActivity(intent)
+    }
+
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        openEditingScreen()
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        Log.d("myPermission", "not allow")
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            AppSettingsDialog.Builder(this).build().show()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
 
 }
