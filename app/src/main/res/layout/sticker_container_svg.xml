@@ -40,7 +40,7 @@
                 android:gravity="center"
                 android:text="@string/import_shape"
                 android:textAlignment="center"
-                android:textColor="@color/daynight_textColor"
+                android:textColor="#37474F"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"

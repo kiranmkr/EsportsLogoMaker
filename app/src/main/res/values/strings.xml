@@ -43,6 +43,16 @@
     <string name="or">or</string>
     <string name="save_pdf_file">Save PDF File</string>
 
+    <string name="save_png">Save as PNG </string>
+    <string name="share_png">Share as PNG </string>
+    <string name="save_jpg">Save as JPG</string>
+    <string name="share_jpg">Share as JPG</string>
+    <string name="save_pdf">Save as PDF</string>
+    <string name="share_pdf">Share as PDF</string>
+    <string name="cancel">Cancel</string>
+    <string name="share_file">Share File</string>
+
+
     <item name="imagePath" type="id" />
 
 </resources>

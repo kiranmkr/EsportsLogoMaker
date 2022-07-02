@@ -1,12 +1,15 @@
 package com.example.esportslogomaker.ui
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -17,33 +20,41 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.Window
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.drawToBitmap
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.esportslogomaker.R
+import com.example.esportslogomaker.customCallBack.AddNewTextCallBack
 import com.example.esportslogomaker.customCallBack.ExportDialogCallBack
+import com.example.esportslogomaker.customCallBack.FontAdapterCallBack
+import com.example.esportslogomaker.customCallBack.StickerClick
 import com.example.esportslogomaker.customDialog.AddNewText
 import com.example.esportslogomaker.customSticker.CustomImageView
 import com.example.esportslogomaker.datamodel.Root
 import com.example.esportslogomaker.recyclerAdapter.*
 import com.example.esportslogomaker.utils.Constant
 import com.example.esportslogomaker.utils.MoveViewTouchListener
+import com.example.esportslogomaker.utils.Utils
 import com.example.logodesign.customDialog.ExportDialog
 import com.example.logodesign.customDialog.UpdateNewText
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.math.roundToInt
 
 class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
-    ExportDialogCallBack, MoveViewTouchListener.EditTextCallBacks {
+    ExportDialogCallBack, MoveViewTouchListener.EditTextCallBacks, SVGColorAdapter.SvgColorClick,
+    StickerClick, AddNewTextCallBack, FontAdapterCallBack {
 
     private val workerThread: ExecutorService = Executors.newCachedThreadPool()
     private val workerHandler = Handler(Looper.getMainLooper())
@@ -325,8 +336,847 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
             }
         })
 
-        //clickHandler()
+        clickHandler()
 
+    }
+
+    private fun clickHandler() {
+
+        btnChangeText?.setOnClickListener {
+            if (currentText != null) {
+                updateNewText?.show(currentText!!.text.toString())
+            }
+        }
+
+        btnDeleteText?.setOnClickListener {
+            if (currentText != null) {
+                rootLayout!!.removeView(currentText)
+                currentText = null
+                textRoot?.visibility = View.GONE
+                layerRoot?.visibility = View.VISIBLE
+            }
+        }
+
+        toolBack?.setOnClickListener {
+            showBackDialog()
+        }
+
+        toolSave?.setOnClickListener {
+
+            if (customSticker != null) {
+                customSticker?.disableAllOthers()
+            }
+
+
+            if (currentText != null) {
+                currentText!!.setBackgroundColor(Color.TRANSPARENT)
+            }
+
+            showBottomSheetDialog()
+
+        }
+
+        svgDownBtn?.setOnClickListener {
+            svgDownBtn?.visibility = View.GONE
+            svgRootContainer?.visibility = View.GONE
+            alphaManagerForAll(this, svgContainerIcon)
+        }
+
+        textDownBtn?.setOnClickListener {
+
+            textDownBtn?.visibility = View.GONE
+            textRootContainer?.visibility = View.GONE
+
+            alphaManagerForAll(this, textContainerIcon)
+
+            if (textRoot?.visibility == View.VISIBLE) {
+                textRoot?.visibility = View.GONE
+            }
+
+            if (stickerRoot?.visibility == View.VISIBLE) {
+                stickerRoot?.visibility = View.GONE
+            }
+
+            if (layerRoot?.visibility == View.GONE) {
+                layerRoot?.visibility = View.VISIBLE
+            }
+        }
+
+        svgLayers?.setOnClickListener(svgClickListener)
+        svgAddText?.setOnClickListener(svgClickListener)
+        svgAddShape?.setOnClickListener(svgClickListener)
+        svgAddSticker?.setOnClickListener(svgClickListener)
+        svgAddImage?.setOnClickListener(svgClickListener)
+
+        textFont?.setOnClickListener(textMenuClickListener)
+        textSize?.setOnClickListener(textMenuClickListener)
+        textColor?.setOnClickListener(textMenuClickListener)
+        textOpacity?.setOnClickListener(textMenuClickListener)
+        textStyle?.setOnClickListener(textMenuClickListener)
+
+        stickerRoot?.setOnClickListener(emptyClickListener)
+
+        updateSVGColorAdapter()
+
+        svgColorPickerImage?.setOnClickListener { svgColorPicker?.visibility = View.VISIBLE }
+
+        svgColorPickerDownImage?.setOnClickListener { svgColorPicker?.visibility = View.GONE }
+
+        svgColorPrimaryImage?.setOnClickListener {
+            /* if (currentSelectPath != null) {
+                 currentSelectPath?.fillColor = Color.parseColor("#b39ddb")
+             } else {
+                 Utils.showToast(this, "Plz select path")
+             }*/
+        }
+
+        svgColorBlackImage?.setOnClickListener {
+            /*if (currentSelectPath != null) {
+                currentSelectPath?.fillColor = Color.parseColor("#000000")
+            } else {
+                Utils.showToast(this, "Plz select path")
+            }*/
+        }
+
+        //code svg Seek Alpha
+        svgSeekAlpha?.max = 10
+        svgSeekAlpha?.progress = 10
+
+        svgSeekAlpha?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+
+                if (fromUser) {
+                    Log.d("mySeekVal", "$progress")
+
+                }
+
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+
+        })
+
+        importSticker?.setOnClickListener {
+            //importImageSticker()
+        }
+
+        updateShapeAdapter()
+
+        updateStickerAdapter()
+
+        cameraBtn?.setOnClickListener {
+            /*Dexter.withContext(this@EditingScreen)
+                .withPermission(Manifest.permission.CAMERA)
+                .withListener(object : PermissionListener {
+                    override fun onPermissionGranted(response: PermissionGrantedResponse?) {
+                        pickCameraImage()
+                    }
+
+                    override fun onPermissionDenied(response: PermissionDeniedResponse?) {
+                        Utils.showToast(this@EditingScreen, "Perssmion is Denied")
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(
+                        permission: PermissionRequest?,
+                        token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
+                }).check()*/
+        }
+
+        galleryBtn?.setOnClickListener {
+            //importImageSticker()
+        }
+
+        addNewText = AddNewText(this@EditingScreen, this)
+        updateNewText = UpdateNewText(this@EditingScreen, this)
+
+        try {
+
+            fileNames = assets.list("font")
+
+            if (fileNames != null) {
+                reFontAdapter = FontAdapter(fileNames, this)
+                reTextFont?.adapter = reFontAdapter
+            }
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        //SeekAlpha Code
+        tvSeekAlpha?.max = 10
+        tvSeekAlpha?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    if (currentText != null) {
+                        if (progress == 10) {
+                            currentText?.alpha = 1.0f
+                        } else {
+                            currentText?.alpha = "0.$progress".toFloat()
+                        }
+                    }
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+
+        tvSizeSeekBar?.max = 300
+        tvSizeSeekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    if (currentText != null) {
+                        if (progress > 10) {
+                            changeFontSize(progress, currentText!!)
+                        }
+                    }
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+
+        //SeekAlpha Code
+        stickerOpacitySeekBar?.max = 10
+        stickerOpacitySeekBar?.progress = 10
+        stickerOpacitySeekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    Log.e("mySeek", "$progress")
+                    if (customSticker != null) {
+                        if (progress == 10) {
+                            customSticker?.imageView?.alpha = 1.0f
+                        } else {
+                            customSticker?.imageView?.alpha = "0.$progress".toFloat()
+                        }
+                    }
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+
+        stickerDelete?.setOnClickListener {
+            customSticker?.deleteObject()
+            stickerRoot?.visibility = View.GONE
+        }
+
+        stickerCheckmark?.setOnClickListener {
+            customSticker?.disableAllOthers()
+            stickerRoot?.visibility = View.GONE
+            if (textRoot?.visibility == View.VISIBLE) {
+                textRoot?.visibility = View.GONE
+            }
+            if (layerRoot?.visibility == View.GONE) {
+                layerRoot?.visibility = View.VISIBLE
+            }
+        }
+
+        stickerFlip?.setOnClickListener {
+            customSticker?.flipRoot()
+        }
+
+        textBold?.setOnClickListener(textStyleListener)
+        textItalic?.setOnClickListener(textStyleListener)
+        textCapital?.setOnClickListener(textStyleListener)
+        textSmall?.setOnClickListener(textStyleListener)
+        textUnderline?.setOnClickListener(textStyleListener)
+    }
+
+    private fun showBackDialog() {
+        AlertDialog.Builder(this@EditingScreen)
+            .setMessage(getString(R.string.are_you_sure_editing))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                Utils.clearGarbageCollection()
+                finish()
+            }
+            .setNegativeButton(getString(R.string.no), null)
+            .show()
+
+    }
+
+    var bottomSheetDialog: BottomSheetDialog? = null
+
+    private fun showBottomSheetDialog() {
+
+        bottomSheetDialog = BottomSheetDialog(this@EditingScreen)
+        bottomSheetDialog?.setContentView(R.layout.bottom_sheet_item)
+
+        /*bottomSheetDialog?.findViewById<View>(R.id.constraintLayout7)?.setOnClickListener {
+            saveAsImagePng()
+            bottomSheetDialog?.hide()
+
+        }
+
+        bottomSheetDialog?.findViewById<View>(R.id.constraintLayout6)?.setOnClickListener {
+            workerHandler.post {
+                rootLayout?.let {
+                    shareAsImagePng(it.drawToBitmap(Bitmap.Config.ARGB_8888))
+                }
+            }
+            bottomSheetDialog?.hide()
+        }
+
+        bottomSheetDialog?.findViewById<View>(R.id.constraintLayout9)?.setOnClickListener {
+            saveAsImageJPG()
+            bottomSheetDialog?.hide()
+            showInAppReviewDialog()
+        }
+
+        bottomSheetDialog?.findViewById<View>(R.id.constraintLayout8)?.setOnClickListener {
+            workerHandler.post {
+                rootLayout?.let {
+                    shareAsImageJpg(it.drawToBitmap(Bitmap.Config.ARGB_8888))
+                }
+            }
+            bottomSheetDialog?.hide()
+        }
+
+        bottomSheetDialog?.findViewById<View>(R.id.constraintLayout11)?.setOnClickListener {
+            saveAsPdfFileNew()
+            bottomSheetDialog?.hide()
+            showInAppReviewDialog()
+        }
+
+        bottomSheetDialog?.findViewById<View>(R.id.constraintLayout10)?.setOnClickListener {
+            shareAsPdfFile()
+            bottomSheetDialog?.hide()
+        }
+*/
+        bottomSheetDialog?.findViewById<View>(R.id.constraintLayout12)?.setOnClickListener {
+            bottomSheetDialog?.hide()
+        }
+
+        bottomSheetDialog?.show()
+    }
+
+    private fun alphaManagerForAll(activity: Activity, views: ArrayList<Any?>) {
+        for (i in views.indices) {
+            activity.findViewById<View>((views[i] as Int?)!!).alpha = "0.40".toFloat()
+        }
+    }
+
+    private val svgClickListener = View.OnClickListener { v: View ->
+
+        alphaManager(this, svgContainerIcon, v.id)
+
+        if (svgDownBtn?.visibility == View.GONE) {
+            svgDownBtn?.visibility = View.VISIBLE
+        }
+
+        if (svgRootContainer?.visibility == View.GONE) {
+            svgRootContainer?.visibility = View.VISIBLE
+        }
+
+        when (v.id) {
+
+            R.id.svgLayers -> {
+                showLayerContainer()
+            }
+
+            R.id.svgAddText -> {
+                addNewText?.show()
+            }
+
+            R.id.svgAddShape -> {
+                showStickerContainer(1)
+            }
+
+            R.id.svgAddSticker -> {
+                showStickerContainer(2)
+            }
+
+            R.id.svgAddImage -> {
+                showImageContainer()
+            }
+
+            else -> {
+                Utils.showToast(this, "No thing click")
+            }
+        }
+    }
+
+    private fun showLayerContainer() {
+
+        alphaManager(this, svgContainerIcon, R.id.svgLayers)
+
+        if (svgRootContainer?.visibility == View.GONE) {
+            svgRootContainer?.visibility = View.VISIBLE
+        }
+
+        svgAddStickerContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        svgAddImageContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        if (currentText != null) {
+            currentText!!.setBackgroundColor(Color.TRANSPARENT)
+        }
+
+
+    }
+
+    private fun showStickerContainer(values: Int) {
+
+        Log.d("myShape", "$values")
+
+        if (values == 1) {
+            if (reShape?.visibility == View.GONE) {
+                importText?.setText(R.string.import_shape)
+                reShape?.visibility = View.VISIBLE
+                reSticker?.visibility = View.GONE
+            }
+        } else {
+            if (reSticker?.visibility == View.GONE) {
+                importText?.setText(R.string.import_sticker)
+                reSticker?.visibility = View.VISIBLE
+                reShape?.visibility = View.GONE
+            }
+        }
+
+        svgAddStickerContainer?.let {
+            if (it.visibility == View.GONE) {
+                it.visibility = View.VISIBLE
+            }
+        }
+
+        svgAddImageContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+    }
+
+    private fun showImageContainer() {
+
+        svgAddStickerContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        svgAddImageContainer?.let {
+            if (it.visibility == View.GONE) {
+                it.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun alphaManager(activity: Activity, views: ArrayList<Any?>, view_id: Int) {
+        for (i in views.indices) {
+            if (views[i] == view_id) {
+                activity.findViewById<View>((views[i] as Int?)!!).alpha = "1.0".toFloat()
+            } else {
+                activity.findViewById<View>((views[i] as Int?)!!).alpha = "0.40".toFloat()
+            }
+        }
+    }
+
+    private val emptyClickListener = View.OnClickListener {
+        Log.d("myEmptyClick", "Click")
+    }
+
+    private fun updateStickerAdapter() {
+        stickerAdapter = StickerAdapter(this)
+        reSticker?.adapter = stickerAdapter
+    }
+
+    private fun updateShapeAdapter() {
+        shapeAdapter = ShapeAdapter(this)
+        reShape?.adapter = shapeAdapter
+    }
+
+    private fun changeFontSize(fontSize: Int, currentEditText: TextView) {
+
+        val oldW: Int = currentEditText.width
+        val oldH: Int = currentEditText.height
+
+        Log.e("changeFontSize", "OLD= $oldW, $oldH, ${currentEditText.x}, ${currentEditText.y}")
+
+        currentEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize.toFloat())
+
+        val newW: Float = currentEditText.width.toFloat()
+        val factor = newW / oldW
+
+        val cmDist: Float = (currentEditText.cameraDistance * factor)
+
+        if (cmDist > 0) {
+
+            try {
+                currentEditText.cameraDistance = cmDist
+            } catch (ex: IllegalArgumentException) {
+            }
+        }
+
+    }
+
+    private val textStyleListener = View.OnClickListener { v: View ->
+        currentText?.let {
+            when (v.id) {
+
+                R.id.imageView20 -> if (boldState) {
+                    if (italicState) {
+                        textBold!!.isSelected = false
+                        boldState = false
+                        currentText?.let {
+                            setItalicStyle(true)
+                        }
+
+                    } else {
+                        textBold!!.isSelected = false
+                        boldState = false
+                        currentText?.let {
+                            setBoldStyle(false)
+                        }
+                    }
+
+                } else {
+
+                    if (italicState) {
+                        textBold!!.isSelected = true
+                        boldState = true
+                        currentText?.let {
+                            setBoldItalic()
+                        }
+                    } else {
+                        textBold!!.isSelected = true
+                        boldState = true
+                        currentText?.let {
+                            setBoldStyle(true)
+                        }
+                    }
+                }
+
+                R.id.imageView21 -> if (italicState) {
+                    if (boldState) {
+                        textItalic!!.isSelected = false
+                        currentText?.let {
+                            setBoldStyle(true)
+                        }
+                        italicState = false
+                    } else {
+                        textItalic!!.isSelected = false
+                        currentText?.let {
+                            setItalicStyle(false)
+                        }
+                        italicState = false
+                    }
+                } else {
+
+                    if (boldState) {
+                        textItalic!!.isSelected = true
+                        currentText?.let {
+                            setBoldItalic()
+                        }
+                        italicState = true
+                    } else {
+                        textItalic!!.isSelected = true
+                        currentText?.let {
+                            setItalicStyle(true)
+                        }
+                        italicState = true
+                    }
+                }
+                R.id.imageView22 -> {
+                    setUppercase()
+                    textSmall!!.isSelected = false
+                    textCapital!!.isSelected = true
+                }
+                R.id.imageView23 -> {
+                    setLowerCase()
+                    textSmall!!.isSelected = true
+                    textCapital!!.isSelected = false
+                }
+                R.id.imageView24 -> if (underlineState) {
+                    setUnderLine()
+                    textUnderline!!.isSelected = false
+                    underlineState = false
+                } else {
+                    setUnderLine()
+                    textUnderline!!.isSelected = true
+                    underlineState = true
+                }
+                else -> {
+                    Utils.showToast(this, "default")
+                }
+            }
+        }
+    }
+
+    private fun setItalicStyle(isBold: Boolean) {
+        val oldTypeface =
+            if (currentText?.typeface != null) currentText?.typeface else if (isBold) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
+        currentText?.typeface =
+            Typeface.create(oldTypeface, if (isBold) Typeface.ITALIC else Typeface.NORMAL)
+    }
+
+    private fun setBoldStyle(isBold: Boolean) {
+        val oldTypeface =
+            if (currentText?.typeface != null) currentText?.typeface else if (isBold) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
+        currentText?.typeface =
+            Typeface.create(oldTypeface, if (isBold) Typeface.BOLD else Typeface.NORMAL)
+    }
+
+    private fun setBoldItalic() {
+        val typeface = Typeface.create(currentText?.typeface, Typeface.BOLD_ITALIC)
+        (currentText)?.typeface = typeface
+    }
+
+    private fun setUppercase() {
+        currentText?.let {
+            it.text = it.text.toString().uppercase(Locale.ROOT)
+        }
+    }
+
+    private fun setLowerCase() {
+        currentText?.let {
+            it.text = it.text.toString().lowercase(Locale.ROOT)
+        }
+    }
+
+    private fun setUnderLine() {
+
+        try {
+
+            currentText?.let {
+                if (it.paintFlags == Paint.UNDERLINE_TEXT_FLAG) {
+                    it.paintFlags = it.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
+                } else {
+                    it.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+                }
+            }
+
+        } catch (exception: IllegalStateException) {
+            exception.printStackTrace()
+        }
+    }
+
+    private val textMenuClickListener = View.OnClickListener { v: View ->
+
+        alphaManager(this, textContainerIcon, v.id)
+
+        if (textDownBtn?.visibility == View.GONE) {
+            textDownBtn?.visibility = View.VISIBLE
+        }
+
+        if (textRootContainer?.visibility == View.GONE) {
+            textRootContainer?.visibility = View.VISIBLE
+        }
+
+        when (v.id) {
+
+            R.id.textFont -> {
+                showTextFontContainer()
+            }
+
+            R.id.textSize -> {
+                showTextSizeContainer()
+            }
+
+            R.id.textColor -> {
+                showTextColorContainer()
+            }
+
+            R.id.textOpacity -> {
+                showTextOpacityContainer()
+            }
+
+            R.id.textStyle -> {
+                showTextStyleContainer()
+            }
+            else -> {
+                Utils.showToast(this, "No thing click")
+            }
+
+        }
+
+
+    }
+
+    private fun showTextFontContainer() {
+
+        textFontContainer?.let {
+            if (it.visibility == View.GONE) {
+                it.visibility = View.VISIBLE
+            }
+        }
+
+        textSizeContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        textOpacityContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        textStyleContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        reTextColor?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun showTextSizeContainer() {
+
+        textFontContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        textSizeContainer?.let {
+            if (it.visibility == View.GONE) {
+                it.visibility = View.VISIBLE
+            }
+        }
+
+        textOpacityContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        textStyleContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        reTextColor?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun showTextColorContainer() {
+
+        textFontContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        textSizeContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        textOpacityContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        textStyleContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        reTextColor?.let {
+            if (it.visibility == View.GONE) {
+                it.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun showTextOpacityContainer() {
+
+        textFontContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        textSizeContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        textOpacityContainer?.let {
+            if (it.visibility == View.GONE) {
+                it.visibility = View.VISIBLE
+            }
+        }
+
+        textStyleContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        reTextColor?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun showTextStyleContainer() {
+
+        textFontContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        textSizeContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        textOpacityContainer?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+
+        textStyleContainer?.let {
+            if (it.visibility == View.GONE) {
+                it.visibility = View.VISIBLE
+            }
+        }
+
+        reTextColor?.let {
+            if (it.visibility == View.VISIBLE) {
+                it.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun updateSVGColorAdapter() {
+        svgColorAdapter = SVGColorAdapter(this)
+        svgColor?.adapter = svgColorAdapter
+        reTextColor?.adapter = svgColorAdapter
     }
 
     private fun loadJSONFromAsset(): String? {
@@ -379,32 +1229,6 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
                     }
 
                 }
-
-                /*  if (imageView.androidBackground != null) {
-
-                      try {
-                          path =
-                              "file:///android_asset/category/${Constant.labelCategory}/assets/${Constant.labelNumber}/0.png"
-                      } catch (ex: IOException) {
-                          ex.printStackTrace()
-                      }
-
-                      path?.let {
-
-                          Glide.with(this@EditingScreen)
-                              .load(it)
-                              .diskCacheStrategy(DiskCacheStrategy.ALL)
-                              .into(newImageView!!)
-
-                          Glide.with(this@EditingScreen)
-                              .load(it)
-                              .diskCacheStrategy(DiskCacheStrategy.ALL)
-                              .into(imageViewSVG!!)
-
-                          currentLayer = newImageView
-                      }
-
-                  }*/
 
                 if (imageView.androidLayoutWidth != null && imageView.androidLayoutHeight != null) {
 
@@ -486,34 +1310,6 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
                     customSticker!!.imageView.setTag(R.id.imagePath, "$path")
 
                 }
-
-                /*if (imageView.androidBackground != null) {
-
-                    try {
-                        path =
-                            "file:///android_asset/category/${Constant.labelCategory}/assets/${Constant.labelNumber}/0.png"
-                    } catch (ex: IOException) {
-                        ex.printStackTrace()
-                    }
-
-                    path?.let {
-
-                        Glide.with(this@EditingScreen)
-                            .load(it)
-                            .dontAnimate()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(customSticker!!.imageView)
-
-                        Glide.with(this@EditingScreen)
-                            .load(it)
-                            .dontAnimate()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(imageViewSVG!!)
-
-                        currentLayer = customSticker!!.imageView
-                    }
-
-                }*/
 
                 if (imageView.androidLayoutWidth != null && imageView.androidLayoutHeight != null) {
 
@@ -723,7 +1519,288 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
     }
 
-    override fun setCurrentText(view: View?) {
+    override fun setCurrentText(view: View) {
+        callingText(view)
+    }
 
+    private fun callingText(view: View) {
+
+        if (customSticker != null) {
+            customSticker?.disableAllOthers()
+        }
+
+        textDownBtn?.visibility = View.VISIBLE
+        textRootContainer?.visibility = View.VISIBLE
+
+        if (textRoot?.visibility == View.GONE) {
+            textRoot?.visibility = View.VISIBLE
+        }
+
+        if (layerRoot?.visibility == View.VISIBLE) {
+            layerRoot?.visibility = View.GONE
+        }
+
+        if (stickerRoot?.visibility == View.VISIBLE) {
+            stickerRoot?.visibility = View.GONE
+        }
+
+        if (currentText != null) {
+
+            currentText!!.setBackgroundColor(Color.TRANSPARENT)
+            currentText = view as TextView
+            currentText!!.background = ContextCompat.getDrawable(this, R.drawable.my_border)
+
+        } else {
+
+            currentText = view as TextView
+            currentText!!.background = ContextCompat.getDrawable(this, R.drawable.my_border)
+
+        }
+
+        if (currentText!!.alpha.toString().replace("0.", "") == "1.0") {
+            tvSeekAlpha!!.progress = 10
+        } else {
+            tvSeekAlpha!!.progress =
+                currentText!!.alpha.toString().replace("0.", "").toFloat().roundToInt().toString()
+                    .toInt()
+        }
+
+        if (currentText?.textSize?.toInt()!! <= 300) {
+            tvSizeSeekBar?.progress = (currentText?.textSize?.toInt()!!)
+        }
+
+        when (currentText!!.typeface.style) {
+
+            Typeface.BOLD_ITALIC -> {
+                textBold!!.isSelected = true
+                textItalic!!.isSelected = true
+                boldState = true
+                italicState = true
+            }
+
+            Typeface.BOLD -> {
+                textBold!!.isSelected = true
+                textItalic!!.isSelected = false
+                boldState = true
+                italicState = false
+            }
+
+            Typeface.ITALIC -> {
+                textBold!!.isSelected = false
+                textItalic!!.isSelected = true
+                boldState = false
+                italicState = true
+            }
+
+            else -> {
+                textBold!!.isSelected = false
+                textItalic!!.isSelected = false
+                boldState = false
+                italicState = false
+            }
+        }
+
+        if (currentText!!.text.toString().matches(Regex(".*[a-z].*"))
+            && !currentText!!.text.toString().matches(Regex(".*[A-Z].*"))
+        ) {
+            textCapital!!.isSelected = false
+            textSmall!!.isSelected = true
+        } else if (currentText!!.text.toString().matches(Regex(".*[A-Z].*"))
+            && !currentText!!.text.toString().matches(Regex(".*[a-z].*"))
+        ) {
+            textCapital!!.isSelected = true
+            textSmall!!.isSelected = false
+        } else {
+            textSmall!!.isSelected = false
+            textCapital!!.isSelected = false
+        }
+
+        if (currentText!!.paintFlags == Paint.UNDERLINE_TEXT_FLAG) {
+            underlineState = true
+            textUnderline!!.isSelected = true
+        } else {
+            underlineState = false
+            textUnderline!!.isSelected = false
+        }
+
+        /*rulerViewIn.setProgress(currentText?.textSize?.toInt()!!)
+
+        if (tvContainer!!.visibility == View.GONE) {
+            tvContainer!!.visibility = View.VISIBLE
+            deafultContainer!!.visibility = View.GONE
+        }
+
+        if (saveExport!!.visibility == View.VISIBLE) {
+            saveExport!!.visibility = View.GONE
+            tvDone!!.visibility = View.VISIBLE
+        }
+
+        customEditText = CustomEditText(this@EditingView, currentText!!)
+        customDialog = CustomDialog(this, currentText!!)
+
+
+        */
+
+
+        /*if (currentText!!.text.toString().matches(Regex(".*[a-z].*"))
+            && !currentText!!.text.toString().matches(Regex(".*[A-Z].*"))
+        ) {
+            textCapital!!.isSelected = false
+            textSmall!!.isSelected = true
+        } else if (currentText!!.text.toString().matches(Regex(".*[A-Z].*"))
+            && !currentText!!.text.toString().matches(Regex(".*[a-z].*"))
+        ) {
+            textCapital!!.isSelected = true
+            textSmall!!.isSelected = false
+        } else {
+            textSmall!!.isSelected = false
+            textCapital!!.isSelected = false
+        }
+
+        if (currentText!!.paintFlags == Paint.UNDERLINE_TEXT_FLAG) {
+            underlineState = true
+            textUnderline!!.isSelected = true
+        } else {
+            underlineState = false
+            textUnderline!!.isSelected = false
+        }*/
+
+    }
+
+    override fun setOnColorClickListener(position: Int) {
+        if (currentText != null) {
+            currentText!!.setTextColor(ContextCompat.getColor(this, Constant.colorArray[position]))
+        }
+    }
+
+    override fun setOnStickerClickListener(position: Int, isShapeOrNot: Boolean) {
+        customSticker = CustomImageView(this)
+        customSticker?.updateCallBack(this)
+
+        if (isShapeOrNot) {
+
+            //val path = "category/shape/${position}.webp"
+            val path = "file:///android_asset/category/shape/$position.webp"
+
+            Log.d("myStickerIs", path)
+
+            //   val newBit: Bitmap? = Utils.getBitmapFromAsset(this, path)
+
+            customSticker?.let {
+
+                Glide.with(this@EditingScreen)
+                    .load(path)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(it.imageView)
+
+                it.imageView.setTag(R.id.imagePath, path)
+
+                rootLayout?.addView(it)
+            }
+
+
+        } else {
+
+            //val path = "category/sticker/${position}.webp"
+            val path = "file:///android_asset/category/sticker/$position.webp"
+            Log.d("myStickerIs", path)
+
+            //val newBit: Bitmap? = Utils.getBitmapFromAsset(this, path)
+
+            customSticker?.let {
+
+                Glide.with(this@EditingScreen)
+                    .load(path)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(it.imageView)
+
+                it.imageView.setTag(R.id.imagePath, path)
+
+                rootLayout?.addView(it)
+            }
+
+        }
+    }
+
+    override fun addText(string: String?) {
+        if (string != null) {
+
+            val newText = TextView(this)
+
+            newText.id = View.generateViewId()
+            newText.text = string
+            newText.isCursorVisible = false
+            newText.setTextColor(Color.BLACK)
+
+            val params = RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+            )
+            newText.layoutParams = params
+
+            val textSizePx = Utils.dpToPx(30f, this)
+
+
+            newText.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSizePx.toFloat())
+
+            newText.y = 100f
+            newText.x = 150f
+
+            rootLayout!!.addView(newText)
+
+            if (rootLayout?.childCount == 0) {
+                //no child in the layout
+                Log.e("childCounter", "" + rootLayout?.childCount)
+
+            } else {
+
+                for (i in 0 until rootLayout!!.childCount) {
+
+                    if (rootLayout!!.getChildAt(i) is TextView) {
+
+                        val textView = rootLayout!!.getChildAt(i) as TextView
+
+                        val viewTreeObserver = textView.viewTreeObserver
+
+                        if (viewTreeObserver.isAlive) {
+
+                            viewTreeObserver.addOnGlobalLayoutListener(object :
+                                ViewTreeObserver.OnGlobalLayoutListener {
+
+                                override fun onGlobalLayout() {
+                                    textView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                                    /*  parentWidth = layoutMove!!.width
+                                      parentHeight = layoutMove!!.height
+                                      newTextColor = textView.currentTextColor*/
+
+                                }
+                            })
+                        }
+
+                        val moveViewTouchListener =
+                            MoveViewTouchListener(this, rootLayout!!.getChildAt(i) as TextView)
+                        rootLayout!!.getChildAt(i).setOnTouchListener(moveViewTouchListener)
+                        moveViewTouchListener.callBacks = this
+                    }
+                }
+            }
+
+        } else {
+            Log.d("myTextValue", "Text is null")
+        }
+
+    }
+
+    override fun updateText(string: String) {
+        currentText?.let {
+            it.text = string
+        }
+    }
+
+    override fun setFont(fontName: String) {
+        currentText?.let {
+            val tf = Typeface.createFromAsset(assets, "font/$fontName")
+            it.typeface = tf
+        }
     }
 }
