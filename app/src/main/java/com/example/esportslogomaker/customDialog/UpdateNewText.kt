@@ -6,8 +6,8 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.ImageView
-import com.example.logodesign.R
-import com.example.logodesign.customCallBack.AddNewTextCallBack
+import com.example.esportslogomaker.R
+import com.example.esportslogomaker.customCallBack.AddNewTextCallBack
 
 
 class UpdateNewText(mActivity: Activity, var callBack: AddNewTextCallBack) {

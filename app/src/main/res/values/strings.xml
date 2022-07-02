@@ -39,5 +39,10 @@
 
     <string name="type_here">Type Here</string>
 
+    <string name="save_image_file">Save Image File</string>
+    <string name="or">or</string>
+    <string name="save_pdf_file">Save PDF File</string>
+
+    <item name="imagePath" type="id" />
 
 </resources>

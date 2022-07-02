@@ -9,7 +9,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.esportslogomaker.R
 import com.example.esportslogomaker.customCallBack.TemplateClickCallBack
-import com.example.esportslogomaker.ui.MainActivity
+
 import com.example.esportslogomaker.utils.Constant
 import com.example.esportslogomaker.utils.loadThumbnail
 

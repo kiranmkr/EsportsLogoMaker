@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.widget.Toast
+import com.example.esportslogomaker.R
 
 object Constant {
 
@@ -22,6 +23,16 @@ object Constant {
             Manifest.permission.READ_EXTERNAL_STORAGE
         )
     }
+
+    @JvmStatic
+    var colorArray = arrayOf(
+        R.color.black,
+        R.color.white,
+        R.color.red_100,
+        R.color.red_300, R.color.red_500, R.color.red_700, R.color.blue_100,
+        R.color.blue_300, R.color.blue_500, R.color.blue_700, R.color.green_100, R.color.green_300,
+        R.color.green_500, R.color.green_700, R.color.Gold
+    )
 
     val cameraPermission = arrayOf(Manifest.permission.CAMERA)
 

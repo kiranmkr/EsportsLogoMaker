@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/daynight_background">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/textView346"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@null"
         android:padding="5dp"
         android:singleLine="true"
         android:text="New Text"
         android:textAlignment="center"
-        android:textColor="@color/daynight_textColor"
-        android:textSize="@dimen/_16sdp"
-        app:layout_constraintBottom_toBottomOf="@+id/clearImg"
+        android:textColor="#757575"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/clearImg" />
@@ -24,16 +22,16 @@
     <EditText
         android:id="@+id/addText"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/_48sdp"
-        android:background="null"
+        android:layout_height="@dimen/_38sdp"
+        android:layout_marginStart="8dp"
+        android:background="@null"
         android:hint="@string/type_here"
-        android:importantForAutofill="no"
         android:inputType="textMultiLine"
+        android:padding="5dp"
         android:singleLine="true"
         android:textAlignment="center"
-        android:textColor="@color/daynight_textColor"
-        android:textColorHint="@color/daynight_textColor"
-        android:textSize="@dimen/_20sdp"
+        android:textColor="#757575"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,8 +39,8 @@
 
     <ImageView
         android:id="@+id/checkImg"
-        android:layout_width="@dimen/_35sdp"
-        android:layout_height="@dimen/_35sdp"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:contentDescription="@string/images"
@@ -52,8 +50,8 @@
 
     <ImageView
         android:id="@+id/clearImg"
-        android:layout_width="@dimen/_35sdp"
-        android:layout_height="@dimen/_35sdp"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/images"

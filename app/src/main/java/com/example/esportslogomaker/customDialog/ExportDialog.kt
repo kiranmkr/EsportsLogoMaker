@@ -9,11 +9,11 @@ import android.view.LayoutInflater
 import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
-import com.example.logodesign.R
-import com.example.logodesign.customCallBack.ExportDialogCallBack
+import com.example.esportslogomaker.R
+import com.example.esportslogomaker.customCallBack.ExportDialogCallBack
 
 
-class ExportDialog(mActivity: Activity, var callBack: ExportDialogCallBack) {
+    class ExportDialog(mActivity: Activity, var callBack: ExportDialogCallBack) {
 
 
     private var customDialog: Dialog
