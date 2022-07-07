@@ -1,0 +1,79 @@
+{
+	"AbsoluteLayout": {
+		"ImageView": [
+			{
+				"_android:id": "@+id/imageView14",
+				"_android:layout_width": "300dp",
+				"_android:layout_height": "300dp",
+				"_android:layout_x": "0dp",
+				"_android:layout_y": "0dp",
+				"_app:srcCompat": "@drawable/_0"
+			},
+			{
+				"_android:id": "@+id/imageView15",
+				"_android:layout_width": "171dp",
+				"_android:layout_height": "189dp",
+				"_android:layout_x": "70dp",
+				"_android:layout_y": "43dp",
+				"_app:srcCompat": "@drawable/_1"
+			},
+			{
+				"_android:id": "@+id/imageView16",
+				"_android:layout_width": "164dp",
+				"_android:layout_height": "183dp",
+				"_android:layout_x": "73dp",
+				"_android:layout_y": "46dp",
+				"_app:srcCompat": "@drawable/_2"
+			},
+			{
+				"_android:id": "@+id/imageView17",
+				"_android:layout_width": "141dp",
+				"_android:layout_height": "136dp",
+				"_android:layout_x": "84dp",
+				"_android:layout_y": "51dp",
+				"_app:srcCompat": "@drawable/_3"
+			},
+			{
+				"_android:id": "@+id/imageView18",
+				"_android:layout_width": "164dp",
+				"_android:layout_height": "62dp",
+				"_android:layout_x": "73dp",
+				"_android:layout_y": "161dp",
+				"_app:srcCompat": "@drawable/_5"
+			},
+			{
+				"_android:id": "@+id/imageView19",
+				"_android:layout_width": "114dp",
+				"_android:layout_height": "112dp",
+				"_android:layout_x": "98dp",
+				"_android:layout_y": "58dp",
+				"_app:srcCompat": "@drawable/_6"
+			},
+			{
+				"_android:id": "@+id/imageView20",
+				"_android:layout_width": "53dp",
+				"_android:layout_height": "63dp",
+				"_android:layout_x": "129dp",
+				"_android:layout_y": "104dp",
+				"_app:srcCompat": "@drawable/_7"
+			}
+		],
+		"TextView": [{
+			"_android:id": "@+id/textView2",
+			"_android:layout_width": "wrap_content",
+			"_android:layout_height": "wrap_content",
+			"_android:layout_x": "94dp",
+			"_android:layout_y": "167dp",
+			"_android:fontFamily": "@font/evil_empire",
+			"_android:letterSpacing": "0",
+			"_android:text": "Tigers",
+			"_android:textColor": "#F6AC24",
+			"_android:textSize": "50sp"
+		}],
+		"_xmlns:android": "http://schemas.android.com/apk/res/android",
+		"_xmlns:app": "http://schemas.android.com/apk/res-auto",
+		"_android:layout_width": "300dp",
+		"_android:layout_height": "300dp",
+		"_android:background": "@color/black"
+	}
+}

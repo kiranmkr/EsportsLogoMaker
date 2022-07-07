@@ -1,0 +1,75 @@
+{
+	"AbsoluteLayout": {
+		"ImageView": [
+			{
+				"_android:id": "@+id/imageView7",
+				"_android:layout_width": "300dp",
+				"_android:layout_height": "300dp",
+				"_android:layout_x": "0dp",
+				"_android:layout_y": "0dp",
+				"_app:srcCompat": "@drawable/_0"
+			},
+			{
+				"_android:id": "@+id/imageView8",
+				"_android:layout_width": "83dp",
+				"_android:layout_height": "156dp",
+				"_android:layout_x": "109dp",
+				"_android:layout_y": "44dp",
+				"_app:srcCompat": "@drawable/_1"
+			},
+			{
+				"_android:id": "@+id/imageView9",
+				"_android:layout_width": "55dp",
+				"_android:layout_height": "110dp",
+				"_android:layout_x": "140dp",
+				"_android:layout_y": "103dp",
+				"_app:srcCompat": "@drawable/_2"
+			},
+			{
+				"_android:id": "@+id/imageView10",
+				"_android:layout_width": "57dp",
+				"_android:layout_height": "127dp",
+				"_android:layout_x": "142dp",
+				"_android:layout_y": "104dp",
+				"_app:srcCompat": "@drawable/_3"
+			},
+			{
+				"_android:id": "@+id/imageView11",
+				"_android:layout_width": "41dp",
+				"_android:layout_height": "113dp",
+				"_android:layout_x": "162dp",
+				"_android:layout_y": "99dp",
+				"_app:srcCompat": "@drawable/_4"
+			},
+			{
+				"_android:id": "@+id/imageView12",
+				"_android:layout_width": "121dp",
+				"_android:layout_height": "218dp",
+				"_android:layout_x": "87dp",
+				"_android:layout_y": "30dp",
+				"_app:srcCompat": "@drawable/_5"
+			},
+			{
+				"_android:id": "@+id/imageView13",
+				"_android:layout_width": "100dp",
+				"_android:layout_height": "192dp",
+				"_android:layout_x": "92dp",
+				"_android:layout_y": "42dp",
+				"_app:srcCompat": "@drawable/_6"
+			},
+			{
+				"_android:id": "@+id/imageView14",
+				"_android:layout_width": "114dp",
+				"_android:layout_height": "211dp",
+				"_android:layout_x": "90dp",
+				"_android:layout_y": "33dp",
+				"_app:srcCompat": "@drawable/_7"
+			}
+		],
+		"_xmlns:android": "http://schemas.android.com/apk/res/android",
+		"_xmlns:app": "http://schemas.android.com/apk/res-auto",
+		"_android:layout_width": "300dp",
+		"_android:layout_height": "300dp",
+		"_android:background": "@color/black"
+	}
+}

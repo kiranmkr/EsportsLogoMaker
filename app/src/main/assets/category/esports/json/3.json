@@ -2,7 +2,7 @@
 	"AbsoluteLayout": {
 		"ImageView": [
 			{
-				"_android:id": "@+id/imageView4",
+				"_android:id": "@+id/imageView15",
 				"_android:layout_width": "300dp",
 				"_android:layout_height": "300dp",
 				"_android:layout_x": "0dp",
@@ -10,38 +10,41 @@
 				"_app:srcCompat": "@drawable/_0"
 			},
 			{
-				"_android:id": "@+id/imageView5",
-				"_android:layout_width": "223dp",
-				"_android:layout_height": "238dp",
-				"_android:layout_x": "38dp",
-				"_android:layout_y": "30dp",
+				"_android:id": "@+id/imageView16",
+				"_android:layout_width": "203dp",
+				"_android:layout_height": "253dp",
+				"_android:layout_x": "51dp",
+				"_android:layout_y": "27dp",
 				"_app:srcCompat": "@drawable/_1"
-			}
-		],
-		"TextView": [
-			{
-				"_android:id": "@+id/textView",
-				"_android:layout_width": "wrap_content",
-				"_android:layout_height": "wrap_content",
-				"_android:layout_x": "100dp",
-				"_android:layout_y": "186dp",
-				"_android:fontFamily": "@font/jersey_w54",
-				"_android:text": "GAMING",
-				"_android:textColor": "#E0CFA1",
-				"_android:textSize": "35sp"
 			},
 			{
-				"_android:id": "@+id/textView3",
-				"_android:layout_width": "wrap_content",
-				"_android:layout_height": "wrap_content",
-				"_android:layout_x": "127dp",
-				"_android:layout_y": "218dp",
-				"_android:fontFamily": "@font/jersey_w54",
-				"_android:text": "TEAM",
-				"_android:textColor": "#E0CFA1",
-				"_android:textSize": "20sp"
+				"_android:id": "@+id/imageView17",
+				"_android:layout_width": "163dp",
+				"_android:layout_height": "247dp",
+				"_android:layout_x": "68dp",
+				"_android:layout_y": "29dp",
+				"_app:srcCompat": "@drawable/_2"
+			},
+			{
+				"_android:id": "@+id/imageView18",
+				"_android:layout_width": "198dp",
+				"_android:layout_height": "208dp",
+				"_android:layout_x": "54dp",
+				"_android:layout_y": "64dp",
+				"_app:srcCompat": "@drawable/_3"
 			}
 		],
+		"TextView":[ {
+			"_android:id": "@+id/textView3",
+			"_android:layout_width": "wrap_content",
+			"_android:layout_height": "wrap_content",
+			"_android:layout_x": "79dp",
+			"_android:layout_y": "31dp",
+			"_android:fontFamily": "@font/evil_empire",
+			"_android:text": "your team",
+			"_android:textColor": "#FD9B00",
+			"_android:textSize": "36sp"
+		}],
 		"_xmlns:android": "http://schemas.android.com/apk/res/android",
 		"_xmlns:app": "http://schemas.android.com/apk/res-auto",
 		"_android:layout_width": "300dp",

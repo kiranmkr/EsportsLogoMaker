@@ -2,7 +2,7 @@
 	"AbsoluteLayout": {
 		"ImageView": [
 			{
-				"_android:id": "@+id/imageView12",
+				"_android:id": "@+id/imageView48",
 				"_android:layout_width": "300dp",
 				"_android:layout_height": "300dp",
 				"_android:layout_x": "0dp",
@@ -10,12 +10,62 @@
 				"_app:srcCompat": "@drawable/_0"
 			},
 			{
-				"_android:id": "@+id/imageView13",
-				"_android:layout_width": "262dp",
-				"_android:layout_height": "247dp",
-				"_android:layout_x": "18dp",
-				"_android:layout_y": "26dp",
+				"_android:id": "@+id/imageView49",
+				"_android:layout_width": "188dp",
+				"_android:layout_height": "205dp",
+				"_android:layout_x": "56dp",
+				"_android:layout_y": "47dp",
 				"_app:srcCompat": "@drawable/_1"
+			},
+			{
+				"_android:id": "@+id/imageView50",
+				"_android:layout_width": "107dp",
+				"_android:layout_height": "61dp",
+				"_android:layout_x": "96dp",
+				"_android:layout_y": "144dp",
+				"_app:srcCompat": "@drawable/_2"
+			},
+			{
+				"_android:id": "@+id/imageView51",
+				"_android:layout_width": "153dp",
+				"_android:layout_height": "128dp",
+				"_android:layout_x": "73dp",
+				"_android:layout_y": "52dp",
+				"_app:srcCompat": "@drawable/_3"
+			},
+			{
+				"_android:id": "@+id/imageView52",
+				"_android:layout_width": "61dp",
+				"_android:layout_height": "62dp",
+				"_android:layout_x": "119dp",
+				"_android:layout_y": "166dp",
+				"_app:srcCompat": "@drawable/_4"
+			}
+		],
+		"TextView": [
+			{
+				"_android:id": "@+id/textView7",
+				"_android:layout_width": "wrap_content",
+				"_android:layout_height": "wrap_content",
+				"_android:layout_x": "94dp",
+				"_android:layout_y": "228dp",
+				"_android:fontFamily": "@font/battle_ground",
+				"_android:text": "ESPORT",
+				"_android:textAlignment": "center",
+				"_android:textColor": "#9A8479",
+				"_android:textSize": "55sp"
+			},
+			{
+				"_android:id": "@+id/textView8",
+				"_android:layout_width": "wrap_content",
+				"_android:layout_height": "wrap_content",
+				"_android:layout_x": "98dp",
+				"_android:layout_y": "228dp",
+				"_android:fontFamily": "@font/battle_ground",
+				"_android:text": "ESPORT",
+				"_android:textAlignment": "center",
+				"_android:textColor": "#FFFFFF",
+				"_android:textSize": "55sp"
 			}
 		],
 		"_xmlns:android": "http://schemas.android.com/apk/res/android",

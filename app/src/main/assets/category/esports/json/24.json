@@ -1,0 +1,70 @@
+{
+	"AbsoluteLayout": {
+		"ImageView": [
+			{
+				"_android:id": "@+id/imageView34",
+				"_android:layout_width": "300dp",
+				"_android:layout_height": "300dp",
+				"_android:layout_x": "0dp",
+				"_android:layout_y": "0dp",
+				"_app:srcCompat": "@drawable/_0"
+			},
+			{
+				"_android:id": "@+id/imageView35",
+				"_android:layout_width": "184dp",
+				"_android:layout_height": "180dp",
+				"_android:layout_x": "57dp",
+				"_android:layout_y": "59dp",
+				"_app:srcCompat": "@drawable/_1"
+			},
+			{
+				"_android:id": "@+id/imageView36",
+				"_android:layout_width": "111dp",
+				"_android:layout_height": "111dp",
+				"_android:layout_x": "94dp",
+				"_android:layout_y": "62dp",
+				"_app:srcCompat": "@drawable/_2"
+			},
+			{
+				"_android:id": "@+id/imageView37",
+				"_android:layout_width": "166dp",
+				"_android:layout_height": "127dp",
+				"_android:layout_x": "64dp",
+				"_android:layout_y": "62dp",
+				"_app:srcCompat": "@drawable/_3"
+			},
+			{
+				"_android:id": "@+id/imageView38",
+				"_android:layout_width": "111dp",
+				"_android:layout_height": "111dp",
+				"_android:layout_x": "94dp",
+				"_android:layout_y": "62dp",
+				"_app:srcCompat": "@drawable/_4"
+			},
+			{
+				"_android:id": "@+id/imageView39",
+				"_android:layout_width": "43dp",
+				"_android:layout_height": "30dp",
+				"_android:layout_x": "182dp",
+				"_android:layout_y": "89dp",
+				"_app:srcCompat": "@drawable/_5"
+			}
+		],
+		"TextView":[ {
+			"_android:id": "@+id/textView2",
+			"_android:layout_width": "wrap_content",
+			"_android:layout_height": "wrap_content",
+			"_android:layout_x": "81dp",
+			"_android:layout_y": "180dp",
+			"_android:fontFamily": "@font/dire_wolf_3d_regular",
+			"_android:text": "Eagle",
+			"_android:textColor": "#000000",
+			"_android:textSize": "50sp"
+		}],
+		"_xmlns:android": "http://schemas.android.com/apk/res/android",
+		"_xmlns:app": "http://schemas.android.com/apk/res-auto",
+		"_android:layout_width": "300dp",
+		"_android:layout_height": "300dp",
+		"_android:background": "@color/black"
+	}
+}

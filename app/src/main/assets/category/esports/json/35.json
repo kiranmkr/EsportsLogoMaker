@@ -1,0 +1,83 @@
+{
+	"AbsoluteLayout": {
+		"ImageView": [
+			{
+				"_android:id": "@+id/imageView7",
+				"_android:layout_width": "300dp",
+				"_android:layout_height": "300dp",
+				"_android:layout_x": "0dp",
+				"_android:layout_y": "0dp",
+				"_app:srcCompat": "@drawable/_0"
+			},
+			{
+				"_android:id": "@+id/imageView8",
+				"_android:layout_width": "222dp",
+				"_android:layout_height": "228dp",
+				"_android:layout_x": "44dp",
+				"_android:layout_y": "44dp",
+				"_app:srcCompat": "@drawable/_1"
+			},
+			{
+				"_android:id": "@+id/imageView9",
+				"_android:layout_width": "51dp",
+				"_android:layout_height": "58dp",
+				"_android:layout_x": "93dp",
+				"_android:layout_y": "213dp",
+				"_app:srcCompat": "@drawable/_2"
+			},
+			{
+				"_android:id": "@+id/imageView10",
+				"_android:layout_width": "163dp",
+				"_android:layout_height": "159dp",
+				"_android:layout_x": "66dp",
+				"_android:layout_y": "75dp",
+				"_app:srcCompat": "@drawable/_3"
+			},
+			{
+				"_android:id": "@+id/imageView11",
+				"_android:layout_width": "142dp",
+				"_android:layout_height": "113dp",
+				"_android:layout_x": "76dp",
+				"_android:layout_y": "109dp",
+				"_app:srcCompat": "@drawable/_4"
+			},
+			{
+				"_android:id": "@+id/imageView12",
+				"_android:layout_width": "117dp",
+				"_android:layout_height": "111dp",
+				"_android:layout_x": "89dp",
+				"_android:layout_y": "92dp",
+				"_app:srcCompat": "@drawable/_5"
+			},
+			{
+				"_android:id": "@+id/imageView13",
+				"_android:layout_width": "221dp",
+				"_android:layout_height": "176dp",
+				"_android:layout_x": "45dp",
+				"_android:layout_y": "45dp",
+				"_app:srcCompat": "@drawable/_6"
+			},
+			{
+				"_android:id": "@+id/imageView14",
+				"_android:layout_width": "189dp",
+				"_android:layout_height": "104dp",
+				"_android:layout_x": "45dp",
+				"_android:layout_y": "117dp",
+				"_app:srcCompat": "@drawable/_7"
+			},
+			{
+				"_android:id": "@+id/imageView15",
+				"_android:layout_width": "198dp",
+				"_android:layout_height": "86dp",
+				"_android:layout_x": "67dp",
+				"_android:layout_y": "45dp",
+				"_app:srcCompat": "@drawable/_8"
+			}
+		],
+		"_xmlns:android": "http://schemas.android.com/apk/res/android",
+		"_xmlns:app": "http://schemas.android.com/apk/res-auto",
+		"_android:layout_width": "300dp",
+		"_android:layout_height": "300dp",
+		"_android:background": "@color/black"
+	}
+}

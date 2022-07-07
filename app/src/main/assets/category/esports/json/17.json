@@ -1,0 +1,91 @@
+{
+	"AbsoluteLayout": {
+		"ImageView": [
+			{
+				"_android:id": "@+id/imageView18",
+				"_android:layout_width": "300dp",
+				"_android:layout_height": "300dp",
+				"_android:layout_x": "0dp",
+				"_android:layout_y": "0dp",
+				"_app:srcCompat": "@drawable/_0"
+			},
+			{
+				"_android:id": "@+id/imageView19",
+				"_android:layout_width": "299dp",
+				"_android:layout_height": "300dp",
+				"_android:layout_x": "0dp",
+				"_android:layout_y": "0dp",
+				"_app:srcCompat": "@drawable/_1"
+			},
+			{
+				"_android:id": "@+id/imageView20",
+				"_android:layout_width": "227dp",
+				"_android:layout_height": "274dp",
+				"_android:layout_x": "36dp",
+				"_android:layout_y": "12dp",
+				"_app:srcCompat": "@drawable/_2"
+			},
+			{
+				"_android:id": "@+id/imageView21",
+				"_android:layout_width": "38dp",
+				"_android:layout_height": "45dp",
+				"_android:layout_x": "110dp",
+				"_android:layout_y": "85dp",
+				"_app:srcCompat": "@drawable/_3"
+			},
+			{
+				"_android:id": "@+id/imageView22",
+				"_android:layout_width": "102dp",
+				"_android:layout_height": "176dp",
+				"_android:layout_x": "92dp",
+				"_android:layout_y": "18dp",
+				"_app:srcCompat": "@drawable/_4"
+			},
+			{
+				"_android:id": "@+id/imageView23",
+				"_android:layout_width": "104dp",
+				"_android:layout_height": "172dp",
+				"_android:layout_x": "88dp",
+				"_android:layout_y": "23dp",
+				"_app:srcCompat": "@drawable/_5"
+			},
+			{
+				"_android:id": "@+id/imageView24",
+				"_android:layout_width": "110dp",
+				"_android:layout_height": "179dp",
+				"_android:layout_x": "86dp",
+				"_android:layout_y": "17dp",
+				"_app:srcCompat": "@drawable/_6"
+			}
+		],
+		"TextView": [
+			{
+				"_android:id": "@+id/textView2",
+				"_android:layout_width": "wrap_content",
+				"_android:layout_height": "wrap_content",
+				"_android:layout_x": "64dp",
+				"_android:layout_y": "203dp",
+				"_android:fontFamily": "@font/evil_empire",
+				"_android:text": "Cyberpuny",
+				"_android:textColor": "#FBFBFB",
+				"_android:textSize": "42sp"
+			},
+			{
+				"_android:id": "@+id/textView3",
+				"_android:layout_width": "wrap_content",
+				"_android:layout_height": "wrap_content",
+				"_android:layout_x": "65dp",
+				"_android:layout_y": "207dp",
+				"_android:fontFamily": "@font/evil_empire",
+				"_android:text": "Cyberpuny",
+				"_android:textColor": "#ABBCDB",
+				"_android:textSize": "42sp"
+			}
+		],
+		"_xmlns:android": "http://schemas.android.com/apk/res/android",
+		"_xmlns:app": "http://schemas.android.com/apk/res-auto",
+		"_android:layout_width": "300dp",
+		"_android:layout_height": "300dp",
+		"_android:background": "@color/black"
+	}
+}

@@ -2,7 +2,7 @@
 	"AbsoluteLayout": {
 		"ImageView": [
 			{
-				"_android:id": "@+id/imageView10",
+				"_android:id": "@+id/imageView32",
 				"_android:layout_width": "300dp",
 				"_android:layout_height": "300dp",
 				"_android:layout_x": "0dp",
@@ -10,12 +10,60 @@
 				"_app:srcCompat": "@drawable/_0"
 			},
 			{
-				"_android:id": "@+id/imageView11",
-				"_android:layout_width": "235dp",
-				"_android:layout_height": "223dp",
-				"_android:layout_x": "32dp",
-				"_android:layout_y": "38dp",
+				"_android:id": "@+id/imageView33",
+				"_android:layout_width": "184dp",
+				"_android:layout_height": "211dp",
+				"_android:layout_x": "57dp",
+				"_android:layout_y": "42dp",
 				"_app:srcCompat": "@drawable/_1"
+			},
+			{
+				"_android:id": "@+id/imageView34",
+				"_android:layout_width": "133dp",
+				"_android:layout_height": "187dp",
+				"_android:layout_x": "83dp",
+				"_android:layout_y": "44dp",
+				"_app:srcCompat": "@drawable/_2"
+			},
+			{
+				"_android:id": "@+id/imageView35",
+				"_android:layout_width": "81dp",
+				"_android:layout_height": "60dp",
+				"_android:layout_x": "109dp",
+				"_android:layout_y": "133dp",
+				"_app:srcCompat": "@drawable/_3"
+			},
+			{
+				"_android:id": "@+id/imageView36",
+				"_android:layout_width": "134dp",
+				"_android:layout_height": "188dp",
+				"_android:layout_x": "82dp",
+				"_android:layout_y": "44dp",
+				"_app:srcCompat": "@drawable/_4"
+			}
+		],
+		"TextView": [
+			{
+				"_android:id": "@+id/textView5",
+				"_android:layout_width": "wrap_content",
+				"_android:layout_height": "wrap_content",
+				"_android:layout_x": "76dp",
+				"_android:layout_y": "194dp",
+				"_android:fontFamily": "@font/battle_ground",
+				"_android:text": "AngryCat",
+				"_android:textColor": "#F2F2F2",
+				"_android:textSize": "50sp"
+			},
+			{
+				"_android:id": "@+id/textView6",
+				"_android:layout_width": "wrap_content",
+				"_android:layout_height": "wrap_content",
+				"_android:layout_x": "79dp",
+				"_android:layout_y": "194dp",
+				"_android:fontFamily": "@font/battle_ground",
+				"_android:text": "AngryCat",
+				"_android:textColor": "#888888",
+				"_android:textSize": "50sp"
 			}
 		],
 		"_xmlns:android": "http://schemas.android.com/apk/res/android",
