@@ -9,10 +9,8 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.esportslogomaker.R
 import com.example.esportslogomaker.customCallBack.TemplateClickCallBack
-
 import com.example.esportslogomaker.utils.Constant
 import com.example.esportslogomaker.utils.loadThumbnail
-
 
 class HomeLabelAdapter(callBack: TemplateClickCallBack) : RecyclerView.Adapter<HomeLabelAdapter.ViewHolder>() {
 
@@ -39,7 +37,7 @@ class HomeLabelAdapter(callBack: TemplateClickCallBack) : RecyclerView.Adapter<H
     }
 
     override fun getItemCount(): Int {
-        return 56
+        return 60
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
