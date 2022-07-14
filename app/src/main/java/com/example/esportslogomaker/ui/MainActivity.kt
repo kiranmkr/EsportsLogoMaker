@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity(), TemplateClickCallBack,
                         startActivity(
                             Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse("https://coreelgo.blogspot.com/privacy-policy")
+                                Uri.parse("https://coreelgo.blogspot.com/2022/07/esport-logo-maker-privacy-policy.html")
                             )
                         )
                     } catch (e: Exception) {
