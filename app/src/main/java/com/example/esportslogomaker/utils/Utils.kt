@@ -23,19 +23,16 @@ import java.util.*
 
 object Utils {
 
-    @Suppress("DEPRECATION")
-    @JvmField
     val BASE_LOCAL_PATH =
-        "${Environment.getExternalStorageDirectory().absolutePath}/Download/LogoMaker/"
+        "${Environment.getExternalStorageDirectory().absolutePath}/Download/EsportsLogoMaker/"
 
-    val Base_External_Save = "${Environment.DIRECTORY_DOWNLOADS}/LogoMaker/"
+    val Base_External_Save = "${Environment.DIRECTORY_DOWNLOADS}/EsportsLogoMaker/"
 
-    @JvmStatic
-    fun getRootPath(context: Context, internalDrir: Boolean): String {
+    fun getRootPath(context: Context, internalDir: Boolean): String {
 
-        val root = if (internalDrir) {
+        val root = if (internalDir) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                context.getExternalFilesDir("LogoMaker")?.absolutePath + "/"
+                context.getExternalFilesDir("EsportsLogoMaker")?.absolutePath + "/"
             } else {
                 BASE_LOCAL_PATH
             }

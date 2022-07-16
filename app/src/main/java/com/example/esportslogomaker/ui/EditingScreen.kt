@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
+import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -52,9 +54,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.json.JSONObject
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
+import java.io.*
 import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.concurrent.ExecutorService
@@ -411,15 +411,34 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
                 )
             }
 
-
         }
 
         savingAsPng?.setOnClickListener {
 
+            Constant.permissionPosition = 3
+
+            if (EasyPermissions.hasPermissions(this, *Constant.readPermission)) {
+                saveImageAsPng()
+            } else {
+                EasyPermissions.requestPermissions(
+                    this, "We need permissions because this and that",
+                    Constant.PICK_IMAGE, *Constant.readPermission
+                )
+            }
+
         }
 
         savingAsPdf?.setOnClickListener {
+            Constant.permissionPosition = 4
 
+            if (EasyPermissions.hasPermissions(this, *Constant.readPermission)) {
+                saveImageAsPdf()
+            } else {
+                EasyPermissions.requestPermissions(
+                    this, "We need permissions because this and that",
+                    Constant.PICK_IMAGE, *Constant.readPermission
+                )
+            }
         }
 
 
@@ -630,6 +649,238 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
         textUnderline?.setOnClickListener(textStyleListener)
     }
 
+    private fun saveMediaToStoragePng(bitmap: Bitmap): String? {
+
+        var filePath: String? = null
+
+        //Generating a file name
+        val filename = "img_${System.currentTimeMillis()}.png"
+
+        //Output stream
+        var fos: OutputStream? = null
+
+        //For devices running android >= Q
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            //getting the contentResolver
+            applicationContext?.contentResolver?.also { resolver ->
+
+                val dirDest = File(Utils.getRootPath(this, false), "img")
+
+                //Content resolver will process the contentValues
+                val contentValues = ContentValues().apply {
+
+                    //putting file information in content values
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+                    put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, "$dirDest")
+                }
+
+                //MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+                //Inserting the contentValues to contentResolver and getting the Uri
+                val imageUri: Uri? = resolver.insert(
+                    MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
+                    contentValues
+                )
+
+                //Opening an outputStream with the Uri that we got
+                fos = imageUri?.let { resolver.openOutputStream(it) }
+
+            }
+        } else {
+            //These for devices running on android < Q
+            //So I don't think an explanation is needed here
+            val dirDest = File(Utils.getRootPath(this, false), "img")
+            if (!dirDest.exists()) {
+                dirDest.mkdirs()
+            }
+            val image = File(dirDest, filename)
+
+            Log.e("myFilePath", "$image")
+
+            filePath = image.toString()
+
+            fos = FileOutputStream(image)
+
+        }
+
+        fos?.use {
+            //Finally writing the bitmap to the output stream that we opened
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+            it.flush()
+            it.close()
+
+            Log.e("myFileFos", "Saved to Photos Main")
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                filePath = saveImageInternalDirectoryPng(bitmap, filename)
+            }
+        }
+
+        return filePath
+    }
+
+    //This method only call Android 10 and above
+    private fun saveImageInternalDirectoryPng(bitmap: Bitmap, filename: String): String? {
+
+        var filePath: String? = null
+
+        //Output stream
+        var fos: OutputStream? = null
+
+        val dirDest = File(Utils.getRootPath(this, true), "img")
+        if (!dirDest.exists()) {
+            dirDest.mkdirs()
+        }
+        val image = File(dirDest, filename)
+
+        try {
+            fos = FileOutputStream(image)
+        } catch (ex: FileNotFoundException) {
+            ex.printStackTrace()
+        }
+
+        @Suppress("SENSELESS_COMPARISON")
+        if (fos != null) {
+            //Finally writing the bitmap to the output stream that we opened
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+            fos.flush()
+            fos.close()
+
+            Log.e("myFileFos", "Saved to Photos Android 10 and above")
+
+            filePath = image.toString()
+
+        } else {
+            Log.e("myFOS", "FOS is null")
+        }
+
+        return filePath
+    }
+
+    private fun savePdfFileToScopeStorage(view: View): String? {
+
+        var filePath: String? = null
+
+        //Generating a file name
+        val filename = "pdf_${System.currentTimeMillis()}.pdf"
+
+        //Output stream
+        var fos: OutputStream? = null
+
+        //For devices running android >= Q
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            //getting the contentResolver
+            applicationContext?.contentResolver?.also { resolver ->
+
+                val dirDest = File(Utils.getRootPath(this, false), "pdf")
+
+                //Content resolver will process the contentValues
+                val contentValues = ContentValues().apply {
+
+                    //putting file information in content values
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+                    put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf")
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, "$dirDest")
+                }
+
+                //MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+                //Inserting the contentValues to contentResolver and getting the Uri
+               // val imageUri: Uri? = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+                val imageUri: Uri? =
+                    resolver.insert(
+                        MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
+                        contentValues
+                    )
+
+                //Opening an outputStream with the Uri that we got
+                fos = imageUri?.let { resolver.openOutputStream(it) }
+
+            }
+        } else {
+            //These for devices running on android < Q
+            //So I don't think an explanation is needed here
+            val dirDest = File(Utils.getRootPath(this, false), "pdf")
+            if (!dirDest.exists()) {
+                dirDest.mkdirs()
+            }
+            val image = File(dirDest, filename)
+
+            Log.e("myFilePath", "$image")
+
+            filePath = image.toString()
+
+            fos = FileOutputStream(image)
+
+        }
+
+        fos?.use {
+            //Finally writing the bitmap to the output stream that we opened
+
+            val document = PdfDocument()
+            val pageInfo = PdfDocument.PageInfo.Builder(view.width, view.height, 1).create()
+            val page = document.startPage(pageInfo)
+
+            view.draw(page.canvas)
+            view.draw(page.canvas)
+            // finish the page
+            document.finishPage(page)
+
+            document.writeTo(it)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                filePath = saveImageInternalDirectoryPdf(view, filename)
+            }
+
+        }
+
+        return filePath
+
+    }
+
+    private fun saveImageInternalDirectoryPdf(view: View, filename: String): String? {
+
+        var filePath: String? = null
+
+        val dirDest = File(Utils.getRootPath(this, true), "pdf")
+        if (!dirDest.exists()) {
+            dirDest.mkdirs()
+        }
+        val image = File(dirDest, filename)
+
+        Log.e("myFilePath", "$image")
+
+        try {
+            filePath = image.toString()
+
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
+
+        //Output stream
+        val fos: OutputStream? = FileOutputStream(image)
+
+        @Suppress("UNNECESSARY_SAFE_CALL")
+        fos?.use {
+            //Finally writing the bitmap to the output stream that we opened
+
+            val document = PdfDocument()
+            val pageInfo = PdfDocument.PageInfo.Builder(view.width, view.height, 1).create()
+            val page = document.startPage(pageInfo)
+
+            view.draw(page.canvas)
+            view.draw(page.canvas)
+            // finish the page
+            document.finishPage(page)
+
+            document.writeTo(it)
+
+        }
+
+        return filePath
+
+    }
+
     private fun showAnimation() {
 
         mainRootLayout?.let {
@@ -798,11 +1049,146 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
                 openGallery()
             }
 
+            3 -> {
+                saveImageAsPng()
+            }
+
+            4 -> {
+                saveImageAsPdf()
+            }
             else -> {
                 Log.d("myPermissionPosition", "Other Permission Working")
             }
         }
 
+    }
+
+    private fun saveImageAsPng() {
+
+        if (savingBitmapPreview != null) {
+
+            if (!this@EditingScreen.isFinishing && dialog != null) {
+                dialog!!.show()
+            }
+
+            workerThread.execute {
+
+                val saveFilePath: String? = saveMediaToStoragePng(savingBitmapPreview!!)
+
+                if (saveFilePath != null && File(saveFilePath).exists()) {
+
+                    workerHandler.postDelayed({
+
+                        try {
+                            Utils.showToast(this@EditingScreen, "$saveFilePath")
+
+                            if (!this@EditingScreen.isFinishing && dialog != null) {
+                                if (dialog!!.isShowing) {
+                                    dialog!!.dismiss()
+                                }
+                            }
+
+                        } catch (ex: java.lang.Exception) {
+                            ex.printStackTrace()
+                        }
+
+                        Log.e("myFileFos", "Saved file and not null")
+                    }, 1000)
+
+                } else {
+                    workerHandler.post {
+
+                        try {
+
+                            if (!this@EditingScreen.isFinishing && dialog != null) {
+                                if (dialog!!.isShowing) {
+                                    dialog!!.dismiss()
+                                }
+                            }
+
+                            Utils.showToast(
+                                this@EditingScreen,
+                                resources.getString(R.string.something_went_wrong)
+                            )
+
+                        } catch (ex: java.lang.Exception) {
+                            ex.printStackTrace()
+                        }
+
+                    }
+                }
+
+            }
+        } else {
+            Utils.showToast(
+                this@EditingScreen,
+                resources.getString(R.string.something_went_wrong)
+            )
+        }
+    }
+
+    private fun saveImageAsPdf() {
+
+        if (savingPreviewImage != null) {
+
+            if (!this@EditingScreen.isFinishing && dialog != null) {
+                dialog!!.show()
+            }
+
+            workerThread.execute {
+
+                val saveFilePath: String? = savePdfFileToScopeStorage(savingPreviewImage!!)
+
+                if (saveFilePath != null && File(saveFilePath).exists()) {
+
+                    workerHandler.postDelayed({
+
+                        try {
+                            Utils.showToast(this@EditingScreen, "$saveFilePath")
+
+                            if (!this@EditingScreen.isFinishing && dialog != null) {
+                                if (dialog!!.isShowing) {
+                                    dialog!!.dismiss()
+                                }
+                            }
+
+                        } catch (ex: java.lang.Exception) {
+                            ex.printStackTrace()
+                        }
+
+                        Log.e("myFileFos", "Saved file and not null")
+                    }, 1000)
+
+                } else {
+                    workerHandler.post {
+
+                        try {
+
+                            if (!this@EditingScreen.isFinishing && dialog != null) {
+                                if (dialog!!.isShowing) {
+                                    dialog!!.dismiss()
+                                }
+                            }
+
+                            Utils.showToast(
+                                this@EditingScreen,
+                                resources.getString(R.string.something_went_wrong)
+                            )
+
+                        } catch (ex: java.lang.Exception) {
+                            ex.printStackTrace()
+                        }
+
+                    }
+                }
+
+            }
+        } else {
+            Utils.showToast(
+                this@EditingScreen,
+                resources.getString(R.string.something_went_wrong)
+            )
+        }
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
