@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity(), TemplateClickCallBack,
     EasyPermissions.PermissionCallbacks {
 
     private lateinit var mainBinding: ActivityMainBinding
-
     private val workerHandler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,8 +105,6 @@ class MainActivity : AppCompatActivity(), TemplateClickCallBack,
             }
             true
         }
-
-
 
         mainBinding.navView.setOnItemSelectedListener {
             when (it.itemId) {

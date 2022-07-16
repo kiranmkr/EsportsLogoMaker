@@ -1161,6 +1161,7 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
                             .load(it)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(newImageView!!)
+
                         newImageView?.setTag(R.id.imagePath, "$path")
                     }
 
@@ -1200,7 +1201,7 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
                     Glide.with(this@EditingScreen)
                         .load(newImageView?.getTag(R.id.imagePath))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(imageViewSVG!!)
 
                     textRoot?.visibility = View.GONE
@@ -1409,6 +1410,35 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
     override fun stickerViewClickDown(currentView: CustomImageView) {
 
+        customSticker = currentView
+
+        Glide.with(this@EditingScreen)
+            .load(customSticker!!.imageView.getTag(R.id.imagePath))
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .into(imageViewSVG!!)
+
+        if (customSticker != null) {
+            customSticker?.disableAllOthers()
+        }
+
+        showLayerContainer()
+
+        if (layerRoot?.visibility == View.GONE) {
+            layerRoot?.visibility = View.VISIBLE
+        }
+
+        stickerRoot?.let {
+            if (it.visibility == View.GONE) {
+                it.visibility = View.VISIBLE
+            }
+        }
+
+        if (customSticker?.imageView?.alpha.toString().replace("0.", "") == "1.0") {
+            stickerOpacitySeekBar?.progress = 10
+        } else {
+            stickerOpacitySeekBar?.progress = customSticker?.imageView?.alpha.toString()
+                .replace("0.", "").toFloat().roundToInt().toString().toInt()
+        }
     }
 
     override fun stickerViewDeleteClick() {
