@@ -14,7 +14,7 @@ import com.example.esportslogomaker.R
 
 fun ImageView.loadThumbnail(path: String, callback: LoadCallback<Drawable>?) {
 
-    Glide.with(App.context)
+    Glide.with(App.getInstance())
         .load(path)
         .dontAnimate()
         .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -53,7 +53,7 @@ fun ImageView.loadThumbnail(path: String, callback: LoadCallback<Drawable>?) {
 }
 
 fun ImageView.loadDrawable(drawable: Int) {
-    Glide.with(App.context)
+    Glide.with(App.getInstance())
         .load(drawable)
         .dontAnimate()
         .diskCacheStrategy(DiskCacheStrategy.NONE)

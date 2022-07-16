@@ -1,18 +1,20 @@
 package com.example.esportslogomaker.utils;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-
 import androidx.multidex.MultiDexApplication;
 
 public class App extends MultiDexApplication {
 
-    @SuppressLint("StaticFieldLeak")
-    public static Context context;
+    private static App sInstance;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        context = this;
+        sInstance = this;
     }
+
+
+    public static App getInstance() {
+        return sInstance;
+    }
+
 }
