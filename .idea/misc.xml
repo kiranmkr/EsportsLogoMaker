@@ -72,7 +72,7 @@
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/activity_editing_screen.xml" value="0.176" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/add_text_dialog.xml" value="0.2421875" />
-        <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/bottom_sheet_item.xml" value="0.20833333333333334" />
+        <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/bottom_sheet_item.xml" value="0.536" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/custom_shape_ui.xml" value="0.24114583333333334" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/dilog_svg_loader.xml" value="0.21354166666666666" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/export_dialog.xml" value="0.536" />
@@ -86,6 +86,7 @@
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/opacity_layout_sticker.xml" value="0.2421875" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/re_font_view.xml" value="0.2421875" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/re_item.xml" value="0.2421875" />
+        <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/save_preview.xml" value="0.20833333333333334" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/size_container_text.xml" value="0.2421875" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/sticker_container_svg.xml" value="0.2421875" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/style_container_text.xml" value="0.2421875" />

@@ -28,6 +28,8 @@ object Constant {
 
     val cameraPermission = arrayOf(Manifest.permission.CAMERA)
 
+    var permissionPosition: Int = 1
+
     @JvmStatic
     var colorArray = arrayOf(
         R.color.black,

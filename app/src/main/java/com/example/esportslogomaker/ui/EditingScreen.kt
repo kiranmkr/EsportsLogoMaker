@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
@@ -27,7 +28,9 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.drawToBitmap
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.esportslogomaker.R
@@ -174,6 +177,16 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
     private var btnDeleteText: ImageView? = null
     private var btnChangeText: TextView? = null
 
+    private var savingRootPreview: View? = null
+    private var mainRootLayout: ConstraintLayout? = null
+
+    private var savingPreviewImage: ImageView? = null
+    private var savingAsPng: ConstraintLayout? = null
+    private var savingAsPdf: ConstraintLayout? = null
+    private var savingAsCross: ConstraintLayout? = null
+
+    private var savingBitmapPreview: Bitmap? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editing_screen)
@@ -204,6 +217,14 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
         toolBack = findViewById(R.id.imageView)
         toolSave = findViewById(R.id.imageView4)
+
+        savingRootPreview = findViewById(R.id.saving_root)
+        mainRootLayout = findViewById(R.id.main_root)
+
+        savingPreviewImage = findViewById(R.id.imageView26)
+        savingAsPng = findViewById(R.id.save_as_png)
+        savingAsPdf = findViewById(R.id.save_as_pdf)
+        savingAsCross = findViewById(R.id.btnCroos)
 
         textRoot = findViewById(R.id.text_root)
         layerRoot = findViewById(R.id.layer_root)
@@ -364,13 +385,47 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
                 customSticker?.disableAllOthers()
             }
 
-
             if (currentText != null) {
                 currentText!!.setBackgroundColor(Color.TRANSPARENT)
             }
 
-            showBottomSheetDialog()
+            if (savingBitmapPreview != null) {
+                savingBitmapPreview!!.recycle()
+                savingBitmapPreview = null
+            }
 
+            savingBitmapPreview = rootLayout?.drawToBitmap(Bitmap.Config.ARGB_8888)
+
+            if (savingBitmapPreview != null) {
+
+                showAnimation()
+
+                savingPreviewImage?.setImageBitmap(savingBitmapPreview)
+
+                savingRootPreview?.visibility = View.VISIBLE
+
+            } else {
+                Utils.showToast(
+                    this@EditingScreen,
+                    resources.getString(R.string.something_went_wrong)
+                )
+            }
+
+
+        }
+
+        savingAsPng?.setOnClickListener {
+
+        }
+
+        savingAsPdf?.setOnClickListener {
+
+        }
+
+
+        savingAsCross?.setOnClickListener {
+            showAnimation()
+            savingRootPreview?.visibility = View.GONE
         }
 
         svgDownBtn?.setOnClickListener {
@@ -456,6 +511,7 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
         importSticker?.setOnClickListener {
             cameraStatus = false
+            Constant.permissionPosition = 2
             openGallery()
         }
 
@@ -465,11 +521,13 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
         cameraBtn?.setOnClickListener {
             cameraStatus = true
+            Constant.permissionPosition = 1
             openCamera()
         }
 
         galleryBtn?.setOnClickListener {
             cameraStatus = false
+            Constant.permissionPosition = 2
             openGallery()
         }
 
@@ -572,6 +630,16 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
         textUnderline?.setOnClickListener(textStyleListener)
     }
 
+    private fun showAnimation() {
+
+        mainRootLayout?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                TransitionManager.beginDelayedTransition(it)
+            }
+        }
+
+    }
+
     private fun openGallery() {
         if (EasyPermissions.hasPermissions(this, *Constant.readPermission)) {
             openGalleryNewWay()
@@ -613,7 +681,6 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
                         rootLayout?.addView(customSticker)
                     }
-
 
                 }
 
@@ -719,11 +786,23 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        if (cameraStatus) {
-            openCamera()
-        } else {
-            openGallery()
+
+        Log.d("myPermissionPosition", "${Constant.permissionPosition}")
+
+        when (Constant.permissionPosition) {
+
+            1 -> {
+                openCamera()
+            }
+            2 -> {
+                openGallery()
+            }
+
+            else -> {
+                Log.d("myPermissionPosition", "Other Permission Working")
+            }
         }
+
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
@@ -1742,8 +1821,6 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
             Log.d("myStickerIs", path)
 
-            //   val newBit: Bitmap? = Utils.getBitmapFromAsset(this, path)
-
             customSticker?.let {
 
                 Glide.with(this@EditingScreen)
@@ -1758,13 +1835,8 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
 
         } else {
-
-            //val path = "category/sticker/${position}.webp"
             val path = "file:///android_asset/category/sticker/$position.webp"
             Log.d("myStickerIs", path)
-
-            //val newBit: Bitmap? = Utils.getBitmapFromAsset(this, path)
-
             customSticker?.let {
 
                 Glide.with(this@EditingScreen)

@@ -55,6 +55,8 @@
     <string name="temp_image">temp_image.jpg</string>
     <string name="temp_images_dir">temp_images</string>
 
+    <string name="something_went_wrong">Something went wrong</string>
+
 
     <item name="imagePath" type="id" />
 
