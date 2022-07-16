@@ -107,6 +107,8 @@ class MainActivity : AppCompatActivity(), TemplateClickCallBack,
             true
         }
 
+
+
         mainBinding.navView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.navigation_home -> {
@@ -120,6 +122,10 @@ class MainActivity : AppCompatActivity(), TemplateClickCallBack,
             return@setOnItemSelectedListener true
         }
 
+        mainBinding.toolBar.post {
+            Log.d("myWidth", "${mainBinding.toolBar.width}")
+            Constant.screenWidth = mainBinding.toolBar.width.toDouble()
+        }
         workerHandler.post {
             mainBinding.homeUi.updateUI(this@MainActivity)
         }

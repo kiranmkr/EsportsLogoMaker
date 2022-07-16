@@ -1,16 +1,13 @@
 package com.example.esportslogomaker.ui
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -20,10 +17,10 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.Window
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.drawToBitmap
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -51,6 +48,7 @@ import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.math.roundToInt
+
 
 class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
     ExportDialogCallBack, MoveViewTouchListener.EditTextCallBacks, SVGColorAdapter.SvgColorClick,
@@ -91,9 +89,7 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
     private var svgDownBtn: ImageView? = null
     private var textDownBtn: ImageView? = null
 
-    private var svgRecyclerView: RecyclerView? = null
     private var svgColor: RecyclerView? = null
-    private var svgLayersAdapter: SVGLayersAdapter? = null
     private var svgColorAdapter: SVGColorAdapter? = null
 
     private var svgColorPicker: ConstraintLayout? = null
@@ -115,51 +111,43 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
     private var galleryBtn: ImageView? = null
 
     //String var
-    var labelCategory: String? = null
-    var labelNumber: Int = 0
-
-    var layerSize: Int = 1
+    private var labelCategory: String? = null
+    private var labelNumber: Int = 0
 
     var currentText: TextView? = null
 
-    //ArrayList var
-    var layerListOfAssest: Array<String?>? = null
-    var addNewText: AddNewText? = null
-    var updateNewText: UpdateNewText? = null
+    private var addNewText: AddNewText? = null
+    private var updateNewText: UpdateNewText? = null
 
     var customSticker: CustomImageView? = null
 
-    var currentRequestCode = 0
-    var currentPhotoPath: String? = null
+    private var textRoot: View? = null
+    private var layerRoot: View? = null
+    private var stickerRoot: View? = null
+    private var reTextFont: RecyclerView? = null
 
-    var textRoot: View? = null
-    var layerRoot: View? = null
-    var stickerRoot: View? = null
-    var reTextFont: RecyclerView? = null
-
-    var reFontAdapter: FontAdapter? = null
+    private var reFontAdapter: FontAdapter? = null
 
     //ArrayList var
-    var fileNames: Array<String?>? = null
-    var tvSeekAlpha: SeekBar? = null
-    var tvSizeSeekBar: SeekBar? = null
-    var stickerOpacitySeekBar: SeekBar? = null
-    var stickerDelete: ImageView? = null
-    var stickerFlip: ImageView? = null
-    var stickerCheckmark: ImageView? = null
+    private var fileNames: Array<String?>? = null
+    private var tvSeekAlpha: SeekBar? = null
+    private var tvSizeSeekBar: SeekBar? = null
+    private var stickerOpacitySeekBar: SeekBar? = null
+    private var stickerDelete: ImageView? = null
+    private var stickerFlip: ImageView? = null
+    private var stickerCheckmark: ImageView? = null
 
-    var textBold: ImageView? = null
-    var textItalic: ImageView? = null
-    var textCapital: ImageView? = null
-    var textSmall: ImageView? = null
-    var textUnderline: ImageView? = null
+    private var textBold: ImageView? = null
+    private var textItalic: ImageView? = null
+    private var textCapital: ImageView? = null
+    private var textSmall: ImageView? = null
+    private var textUnderline: ImageView? = null
 
     //Boolean var
-    var boldState = false
-    var italicState = false
-    var underlineState = false
-    var layerStatusColor = false
-    var exportDialog: ExportDialog? = null
+    private var boldState = false
+    private var italicState = false
+    private var underlineState = false
+    private var exportDialog: ExportDialog? = null
 
     private var dialog: Dialog? = null
 
@@ -169,10 +157,8 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
         ArrayList()
     private var rootLayout: RelativeLayout? = null
     private var screenRatioFactor: Double = 1.0
-    private var screenWidth: Double = 720.0
 
     private var imageViewSVG: ImageView? = null
-    private var currentLayer: ImageView? = null
 
     private var btnDeleteText: ImageView? = null
     private var btnChangeText: TextView? = null
@@ -183,28 +169,28 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
         exportDialog = ExportDialog(this@EditingScreen, this)
 
-        workerThread.execute {
-
-            labelCategory = Constant.labelCategory
-            labelNumber = Constant.labelNumber
-
-            Log.d("myCategoryData", "$labelCategory -- $labelNumber")
-
-            workerHandler.postDelayed({
-                initID()
-            }, 0)
-
-        }
-
         //Window dialog code
         dialog = Dialog(this@EditingScreen)
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.setContentView(R.layout.dilog_svg_loader)
         dialog?.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.setCancelable(false)
+
+        workerHandler.postDelayed({
+
+            labelCategory = Constant.labelCategory
+            labelNumber = Constant.labelNumber
+
+            Log.d("myCategoryData", "$labelCategory -- $labelNumber -- ${Constant.screenWidth}")
+
+            initID()
+
+        }, 0)
+
     }
 
     private fun initID() {
+
 
         toolBack = findViewById(R.id.imageView)
         toolSave = findViewById(R.id.imageView4)
@@ -284,57 +270,48 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
         cameraBtn = findViewById(R.id.imageView17)
         galleryBtn = findViewById(R.id.imageView16)
 
+        if (rootLayout != null) {
 
-        val viewTreeObserver = rootLayout?.viewTreeObserver
-        viewTreeObserver?.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                rootLayout?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
+            if (loadJSONFromAsset() != null) {
 
-                if (rootLayout != null) {
-                    screenWidth = rootLayout!!.width.toDouble()
-                }
+                val obj = JSONObject(loadJSONFromAsset()!!)
+                val om = ObjectMapper()
+                val root: Root = om.readValue(obj.toString(), Root::class.java)
 
-                if (loadJSONFromAsset() != null) {
+                if (root.absoluteLayout != null) {
+                    screenRatioFactor =
+                        Constant.screenWidth / root.absoluteLayout!!.androidLayoutWidth!!.replace(
+                            "dp",
+                            ""
+                        ).toDouble()
 
-                    val obj = JSONObject(loadJSONFromAsset()!!)
-                    val om = ObjectMapper()
-                    val root: Root = om.readValue(obj.toString(), Root::class.java)
-
-                    if (root.absoluteLayout != null) {
-                        screenRatioFactor =
-                            screenWidth / root.absoluteLayout!!.androidLayoutWidth!!.replace(
-                                "dp",
-                                ""
-                            ).toDouble()
-
-                        if (root.absoluteLayout!!.imageView != null) {
-                            root.absoluteLayout!!.imageView!!.forEachIndexed { index, imageView ->
-                                imageViewArray.add(index, imageView)
-                            }
-                        }
-                        if (root.absoluteLayout!!.textView != null) {
-                            root.absoluteLayout?.textView?.forEachIndexed { index, textview ->
-                                textViewJson.add(index, textview)
-                            }
+                    if (root.absoluteLayout!!.imageView != null) {
+                        root.absoluteLayout!!.imageView!!.forEachIndexed { index, imageView ->
+                            imageViewArray.add(index, imageView)
                         }
                     }
-
-                    if (imageViewArray.size > 0) {
-                        addImage(imageViewArray)
+                    if (root.absoluteLayout!!.textView != null) {
+                        root.absoluteLayout?.textView?.forEachIndexed { index, textview ->
+                            textViewJson.add(index, textview)
+                        }
                     }
-
-                    if (textViewJson.size > 0) {
-                        addText(textViewJson)
-                    }
-
-                } else {
-
-                    Log.e("myError", "wrong json")
                 }
 
+                if (imageViewArray.size > 0) {
+                    addImage(imageViewArray)
+                }
+
+                if (textViewJson.size > 0) {
+                    addText(textViewJson)
+                }
+
+            } else {
+                Log.e("myError", "wrong json")
             }
-        })
+
+        } else {
+            Log.d("myDebugger", "view is null")
+        }
 
         clickHandler()
 
@@ -474,7 +451,7 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
                     }
 
                     override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-                        Utils.showToast(this@EditingScreen, "Perssmion is Denied")
+                        Utils.showToast(this@EditingScreen, "Permission is Denied")
                     }
 
                     override fun onPermissionRationaleShouldBeShown(
@@ -602,54 +579,13 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
     }
 
-    var bottomSheetDialog: BottomSheetDialog? = null
+    private var bottomSheetDialog: BottomSheetDialog? = null
 
     private fun showBottomSheetDialog() {
 
         bottomSheetDialog = BottomSheetDialog(this@EditingScreen)
         bottomSheetDialog?.setContentView(R.layout.bottom_sheet_item)
 
-        /*bottomSheetDialog?.findViewById<View>(R.id.constraintLayout7)?.setOnClickListener {
-            saveAsImagePng()
-            bottomSheetDialog?.hide()
-
-        }
-
-        bottomSheetDialog?.findViewById<View>(R.id.constraintLayout6)?.setOnClickListener {
-            workerHandler.post {
-                rootLayout?.let {
-                    shareAsImagePng(it.drawToBitmap(Bitmap.Config.ARGB_8888))
-                }
-            }
-            bottomSheetDialog?.hide()
-        }
-
-        bottomSheetDialog?.findViewById<View>(R.id.constraintLayout9)?.setOnClickListener {
-            saveAsImageJPG()
-            bottomSheetDialog?.hide()
-            showInAppReviewDialog()
-        }
-
-        bottomSheetDialog?.findViewById<View>(R.id.constraintLayout8)?.setOnClickListener {
-            workerHandler.post {
-                rootLayout?.let {
-                    shareAsImageJpg(it.drawToBitmap(Bitmap.Config.ARGB_8888))
-                }
-            }
-            bottomSheetDialog?.hide()
-        }
-
-        bottomSheetDialog?.findViewById<View>(R.id.constraintLayout11)?.setOnClickListener {
-            saveAsPdfFileNew()
-            bottomSheetDialog?.hide()
-            showInAppReviewDialog()
-        }
-
-        bottomSheetDialog?.findViewById<View>(R.id.constraintLayout10)?.setOnClickListener {
-            shareAsPdfFile()
-            bottomSheetDialog?.hide()
-        }
-*/
         bottomSheetDialog?.findViewById<View>(R.id.constraintLayout12)?.setOnClickListener {
             bottomSheetDialog?.hide()
         }
@@ -1471,26 +1407,6 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
         }
     }
 
-    private fun addImage(bitmap: Bitmap) {
-
-        try {
-
-            customSticker = CustomImageView(this)
-            customSticker?.updateCallBack(this@EditingScreen)
-
-            customSticker?.let {
-
-                it.setBitMap(bitmap)
-
-                rootLayout?.addView(it)
-            }
-
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
     override fun stickerViewClickDown(currentView: CustomImageView) {
 
     }
@@ -1622,48 +1538,6 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
             underlineState = false
             textUnderline!!.isSelected = false
         }
-
-        /*rulerViewIn.setProgress(currentText?.textSize?.toInt()!!)
-
-        if (tvContainer!!.visibility == View.GONE) {
-            tvContainer!!.visibility = View.VISIBLE
-            deafultContainer!!.visibility = View.GONE
-        }
-
-        if (saveExport!!.visibility == View.VISIBLE) {
-            saveExport!!.visibility = View.GONE
-            tvDone!!.visibility = View.VISIBLE
-        }
-
-        customEditText = CustomEditText(this@EditingView, currentText!!)
-        customDialog = CustomDialog(this, currentText!!)
-
-
-        */
-
-
-        /*if (currentText!!.text.toString().matches(Regex(".*[a-z].*"))
-            && !currentText!!.text.toString().matches(Regex(".*[A-Z].*"))
-        ) {
-            textCapital!!.isSelected = false
-            textSmall!!.isSelected = true
-        } else if (currentText!!.text.toString().matches(Regex(".*[A-Z].*"))
-            && !currentText!!.text.toString().matches(Regex(".*[a-z].*"))
-        ) {
-            textCapital!!.isSelected = true
-            textSmall!!.isSelected = false
-        } else {
-            textSmall!!.isSelected = false
-            textCapital!!.isSelected = false
-        }
-
-        if (currentText!!.paintFlags == Paint.UNDERLINE_TEXT_FLAG) {
-            underlineState = true
-            textUnderline!!.isSelected = true
-        } else {
-            underlineState = false
-            textUnderline!!.isSelected = false
-        }*/
 
     }
 

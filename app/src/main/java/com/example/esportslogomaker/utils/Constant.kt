@@ -12,6 +12,8 @@ object Constant {
     const val CAMERA_IMAGE = 10101
     const val PICK_IMAGE = 20202
 
+    var screenWidth: Double = 720.0
+
     val readPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         arrayOf(
             Manifest.permission.ACCESS_MEDIA_LOCATION,

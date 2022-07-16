@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/_5sdp"
-    android:background="@drawable/shapecard"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="@drawable/ripple"
+
     android:orientation="horizontal"
     app:cardCornerRadius="@dimen/_10sdp">
 
