@@ -2,8 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/daynight_background"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/daynight_background">
 
     <TextView
         android:id="@+id/textView21"
@@ -12,7 +12,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/opacity"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/daynight_textColor"
         android:textSize="@dimen/_14sdp"
         app:layout_constraintBottom_toTopOf="@+id/stickerOpacitySeekBar"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
-         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

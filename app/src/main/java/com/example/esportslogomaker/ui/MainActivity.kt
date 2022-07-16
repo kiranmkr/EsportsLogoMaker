@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.ViewTreeObserver
 import androidx.core.view.GravityCompat
 import com.example.esportslogomaker.R
 import com.example.esportslogomaker.customCallBack.TemplateClickCallBack
@@ -119,10 +120,23 @@ class MainActivity : AppCompatActivity(), TemplateClickCallBack,
             return@setOnItemSelectedListener true
         }
 
-        mainBinding.toolBar.post {
-            Log.d("myWidth", "${mainBinding.toolBar.width}")
-            Constant.screenWidth = mainBinding.toolBar.width.toDouble()
+        val viewTreeObserver = mainBinding.toolBar.viewTreeObserver
+
+        if (viewTreeObserver!!.isAlive) {
+
+            viewTreeObserver.addOnGlobalLayoutListener(object :
+                ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    mainBinding.toolBar.viewTreeObserver?.removeOnGlobalLayoutListener(this)
+
+                    //Log.d("myWidth", "${mainBinding.toolBar.width} -- ${mainBinding.toolBar.height}")
+
+                    Constant.screenWidth = mainBinding.toolBar.width.toDouble()
+
+                }
+            })
         }
+
         workerHandler.post {
             mainBinding.homeUi.updateUI(this@MainActivity)
         }

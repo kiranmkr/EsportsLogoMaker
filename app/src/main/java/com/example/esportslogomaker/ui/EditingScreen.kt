@@ -41,6 +41,8 @@ import com.example.logodesign.customDialog.UpdateNewText
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.json.JSONObject
+import pub.devrel.easypermissions.AppSettingsDialog
+import pub.devrel.easypermissions.EasyPermissions
 import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
@@ -52,7 +54,7 @@ import kotlin.math.roundToInt
 
 class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
     ExportDialogCallBack, MoveViewTouchListener.EditTextCallBacks, SVGColorAdapter.SvgColorClick,
-    StickerClick, AddNewTextCallBack, FontAdapterCallBack {
+    StickerClick, AddNewTextCallBack, FontAdapterCallBack, EasyPermissions.PermissionCallbacks {
 
     private val workerThread: ExecutorService = Executors.newCachedThreadPool()
     private val workerHandler = Handler(Looper.getMainLooper())
@@ -191,7 +193,6 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
     private fun initID() {
 
-
         toolBack = findViewById(R.id.imageView)
         toolSave = findViewById(R.id.imageView4)
 
@@ -272,45 +273,55 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
         if (rootLayout != null) {
 
-            if (loadJSONFromAsset() != null) {
+            rootLayout!!.post {
 
-                val obj = JSONObject(loadJSONFromAsset()!!)
-                val om = ObjectMapper()
-                val root: Root = om.readValue(obj.toString(), Root::class.java)
+                Log.d("myWidth", "${rootLayout!!.width}")
 
-                if (root.absoluteLayout != null) {
-                    screenRatioFactor =
-                        Constant.screenWidth / root.absoluteLayout!!.androidLayoutWidth!!.replace(
-                            "dp",
-                            ""
-                        ).toDouble()
+                Constant.screenWidth = rootLayout!!.width.toDouble()
 
-                    if (root.absoluteLayout!!.imageView != null) {
-                        root.absoluteLayout!!.imageView!!.forEachIndexed { index, imageView ->
-                            imageViewArray.add(index, imageView)
+                if (loadJSONFromAsset() != null) {
+
+                    val obj = JSONObject(loadJSONFromAsset()!!)
+                    val om = ObjectMapper()
+                    val root: Root = om.readValue(obj.toString(), Root::class.java)
+
+                    if (root.absoluteLayout != null) {
+                        screenRatioFactor =
+                            Constant.screenWidth / root.absoluteLayout!!.androidLayoutWidth!!.replace(
+                                "dp",
+                                ""
+                            ).toDouble()
+
+                        if (root.absoluteLayout!!.imageView != null) {
+                            root.absoluteLayout!!.imageView!!.forEachIndexed { index, imageView ->
+                                imageViewArray.add(index, imageView)
+                            }
+                        }
+                        if (root.absoluteLayout!!.textView != null) {
+                            root.absoluteLayout?.textView?.forEachIndexed { index, textview ->
+                                textViewJson.add(index, textview)
+                            }
                         }
                     }
-                    if (root.absoluteLayout!!.textView != null) {
-                        root.absoluteLayout?.textView?.forEachIndexed { index, textview ->
-                            textViewJson.add(index, textview)
-                        }
+
+                    if (imageViewArray.size > 0) {
+                        addImage(imageViewArray)
                     }
-                }
 
-                if (imageViewArray.size > 0) {
-                    addImage(imageViewArray)
-                }
+                    if (textViewJson.size > 0) {
+                        addText(textViewJson)
+                    }
 
-                if (textViewJson.size > 0) {
-                    addText(textViewJson)
+                } else {
+                    Log.e("myError", "wrong json")
+                    Utils.showToast(this@EditingScreen, "Wrong json")
+                    finish()
                 }
-
-            } else {
-                Log.e("myError", "wrong json")
             }
 
         } else {
             Log.d("myDebugger", "view is null")
+            Utils.showToast(this, "View is null")
         }
 
         clickHandler()
@@ -577,6 +588,26 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
             .setNegativeButton(getString(R.string.no), null)
             .show()
 
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        Log.d("myPermission", "Permission allow")
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        Log.d("myPermission", "not allow")
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            AppSettingsDialog.Builder(this).build().show()
+        }
     }
 
     private var bottomSheetDialog: BottomSheetDialog? = null
