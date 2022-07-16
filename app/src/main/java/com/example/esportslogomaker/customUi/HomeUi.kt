@@ -33,7 +33,7 @@ class HomeUi @JvmOverloads constructor(
         recyclerViewShape.apply {
             setHasFixedSize(true)
             adapter = HomeLabelAdapter(callBack)
-            //showAnimation()
+            showAnimation()
         }
     }
 

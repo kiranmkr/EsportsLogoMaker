@@ -46,6 +46,7 @@
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/prnt_btn_bg.xml" value="0.248" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/ripple.xml" value="0.248" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/round_bg.xml" value="0.248" />
+        <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/round_bg_save.xml" value="0.2195" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/round_bold_off.xml" value="0.248" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/round_bold_on.xml" value="0.248" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/drawable/round_camera.xml" value="0.248" />
@@ -86,7 +87,7 @@
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/opacity_layout_sticker.xml" value="0.2421875" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/re_font_view.xml" value="0.2421875" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/re_item.xml" value="0.2421875" />
-        <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/save_preview.xml" value="0.20833333333333334" />
+        <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/save_preview.xml" value="0.4" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/size_container_text.xml" value="0.2421875" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/sticker_container_svg.xml" value="0.2421875" />
         <entry key="..\:/EsportsLogoMaker/app/src/main/res/layout/style_container_text.xml" value="0.2421875" />

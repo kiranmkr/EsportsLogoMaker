@@ -785,7 +785,7 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
                 //MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
                 //Inserting the contentValues to contentResolver and getting the Uri
-               // val imageUri: Uri? = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+                // val imageUri: Uri? = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
 
                 val imageUri: Uri? =
                     resolver.insert(
@@ -1013,6 +1013,16 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
             }
         }
+
+    override fun onBackPressed() {
+        //super.onBackPressed()
+        if (savingRootPreview?.visibility == View.VISIBLE){
+            showAnimation()
+            savingRootPreview?.visibility = View.GONE
+        }else{
+            showBackDialog()
+        }
+    }
 
     private fun showBackDialog() {
         AlertDialog.Builder(this@EditingScreen)

@@ -9,7 +9,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <!-- Customize your theme here. -->
-        <item name="fontFamily">@font/futura_bold</item>
+        <item name="fontFamily">@font/futura_normal</item>
         <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
     </style>
 
