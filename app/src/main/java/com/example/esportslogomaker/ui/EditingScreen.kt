@@ -4,23 +4,29 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.Window
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -43,6 +49,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.json.JSONObject
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
@@ -111,6 +118,8 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
     private var cameraBtn: ImageView? = null
     private var galleryBtn: ImageView? = null
+
+    private var cameraStatus = false
 
     //String var
     private var labelCategory: String? = null
@@ -446,7 +455,8 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
         })
 
         importSticker?.setOnClickListener {
-            //importImageSticker()
+            cameraStatus = false
+            openGallery()
         }
 
         updateShapeAdapter()
@@ -454,28 +464,13 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
         updateStickerAdapter()
 
         cameraBtn?.setOnClickListener {
-            /*Dexter.withContext(this@EditingScreen)
-                .withPermission(Manifest.permission.CAMERA)
-                .withListener(object : PermissionListener {
-                    override fun onPermissionGranted(response: PermissionGrantedResponse?) {
-                        pickCameraImage()
-                    }
-
-                    override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-                        Utils.showToast(this@EditingScreen, "Permission is Denied")
-                    }
-
-                    override fun onPermissionRationaleShouldBeShown(
-                        permission: PermissionRequest?,
-                        token: PermissionToken?
-                    ) {
-                        token?.continuePermissionRequest()
-                    }
-                }).check()*/
+            cameraStatus = true
+            openCamera()
         }
 
         galleryBtn?.setOnClickListener {
-            //importImageSticker()
+            cameraStatus = false
+            openGallery()
         }
 
         addNewText = AddNewText(this@EditingScreen, this)
@@ -577,6 +572,130 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
         textUnderline?.setOnClickListener(textStyleListener)
     }
 
+    private fun openGallery() {
+        if (EasyPermissions.hasPermissions(this, *Constant.readPermission)) {
+            openGalleryNewWay()
+        } else {
+            EasyPermissions.requestPermissions(
+                this, "We need permissions because this and that",
+                Constant.PICK_IMAGE, *Constant.readPermission
+            )
+        }
+    }
+
+    private fun openGalleryNewWay() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_PICK
+        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        getResult.launch(intent)
+    }
+
+    // Receiver
+    private val getResult =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+
+                val value = it.data?.data
+
+                if (value != null) {
+
+                    customSticker = CustomImageView(this)
+                    customSticker?.updateCallBack(this)
+
+                    if (customSticker != null) {
+
+                        Glide.with(this@EditingScreen)
+                            .load(value)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .into(customSticker!!.imageView)
+
+                        rootLayout?.addView(customSticker)
+                    }
+
+
+                }
+
+            }
+        }
+
+
+    private fun openCamera() {
+        if (EasyPermissions.hasPermissions(this, *Constant.cameraPermission)) {
+            openCameraNewWay()
+        } else {
+            EasyPermissions.requestPermissions(
+                this, "We need permissions because this and that",
+                Constant.CAMERA_IMAGE, *Constant.cameraPermission
+            )
+        }
+    }
+
+    private var camUri: Uri? = null
+
+    private fun openCameraNewWay() {
+        camUri = initTempUri()
+        camUri?.let {
+            takePicture.launch(it)
+        }
+    }
+
+    private fun initTempUri(): Uri? {
+        //gets the temp_images dir
+        val tempImagesDir = File(
+            applicationContext.filesDir, //this function gets the external cache dir
+            getString(R.string.temp_images_dir)
+        ) //gets the directory for the temporary images dir
+
+        tempImagesDir.mkdir() //Create the temp_images dir
+
+        //Creates the temp_image.jpg file
+        val tempImage = File(
+            tempImagesDir, //prefix the new abstract path with the temporary images dir path
+            getString(R.string.temp_image)
+        ) //gets the abstract temp_image file name
+
+        return if (Build.VERSION.SDK_INT >= 24) {
+            FileProvider.getUriForFile(
+                applicationContext,
+                Constant.fileProvider,
+                tempImage
+            )
+        } else {
+            Uri.fromFile(tempImage)
+        }
+
+    }
+
+    private val takePicture =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { success: Boolean ->
+
+            // The image was saved into the given Uri -> do something with it
+            if (success) {
+
+                if (camUri != null) {
+
+                    customSticker = CustomImageView(this)
+                    customSticker?.updateCallBack(this)
+
+                    if (customSticker != null) {
+
+                        Glide.with(this@EditingScreen)
+                            .load(camUri)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .into(customSticker!!.imageView)
+
+                        rootLayout?.addView(customSticker)
+                    }
+
+                } else {
+                    Log.d("myCameraImage", "image is not save")
+                }
+
+            }
+        }
+
     private fun showBackDialog() {
         AlertDialog.Builder(this@EditingScreen)
             .setMessage(getString(R.string.are_you_sure_editing))
@@ -600,7 +719,11 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        Log.d("myPermission", "Permission allow")
+        if (cameraStatus) {
+            openCamera()
+        } else {
+            openGallery()
+        }
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
@@ -1190,7 +1313,7 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
                     path?.let {
                         Glide.with(this@EditingScreen)
                             .load(it)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(newImageView!!)
 
                         newImageView?.setTag(R.id.imagePath, "$path")
@@ -1445,7 +1568,7 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
         Glide.with(this@EditingScreen)
             .load(customSticker!!.imageView.getTag(R.id.imagePath))
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
             .into(imageViewSVG!!)
 
         if (customSticker != null) {
@@ -1625,7 +1748,7 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
                 Glide.with(this@EditingScreen)
                     .load(path)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(it.imageView)
 
                 it.imageView.setTag(R.id.imagePath, path)
@@ -1646,7 +1769,7 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
                 Glide.with(this@EditingScreen)
                     .load(path)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(it.imageView)
 
                 it.imageView.setTag(R.id.imagePath, path)

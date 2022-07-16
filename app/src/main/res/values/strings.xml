@@ -52,6 +52,9 @@
     <string name="cancel">Cancel</string>
     <string name="share_file">Share File</string>
 
+    <string name="temp_image">temp_image.jpg</string>
+    <string name="temp_images_dir">temp_images</string>
+
 
     <item name="imagePath" type="id" />
 

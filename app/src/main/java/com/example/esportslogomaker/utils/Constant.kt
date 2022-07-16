@@ -41,6 +41,9 @@ object Constant {
     const val applicationId = "com.example.esportslogomaker"
 
     @JvmStatic
+    val fileProvider: String = "${applicationId}.fileprovider"
+
+    @JvmStatic
     var labelNumber: Int = 1
 
     @JvmStatic
