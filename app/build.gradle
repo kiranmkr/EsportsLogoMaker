@@ -5,6 +5,23 @@ plugins {
 
 android {
 
+
+    //D:\EsportsLogoMaker\app
+    signingConfigs {
+        config {
+            storeFile file('D:\\EsportsLogoMaker\\app\\esportlogo.jks')
+            keyAlias 'upload'
+            keyPassword 'coreelgo'
+            storePassword 'coreelgo'
+        }
+        debug {
+            storeFile file('D:\\EsportsLogoMaker\\app\\esportlogo.jks')
+            keyAlias = 'upload'
+            keyPassword 'coreelgo'
+            storePassword 'coreelgo'
+        }
+    }
+
     compileSdk 31
     ndkVersion '22.1.7171670'
 
@@ -23,10 +40,19 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
+
     compileOptions {
         sourceCompatibility "11"
         targetCompatibility "11"
