@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity(), TemplateClickCallBack,
         mainBinding.navigationView.setNavigationItemSelectedListener {
 
             when (it.itemId) {
+
                 R.id.nav_rate_us -> {
 
                     if (getSharedPreferences("inAppReview") == "0") {

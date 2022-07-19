@@ -37,7 +37,7 @@ class HomeLabelAdapter(callBack: TemplateClickCallBack) : RecyclerView.Adapter<H
     }
 
     override fun getItemCount(): Int {
-        return 60
+        return 54
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

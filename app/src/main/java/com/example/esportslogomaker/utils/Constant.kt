@@ -40,7 +40,7 @@ object Constant {
         R.color.green_500, R.color.green_700, R.color.Gold
     )
 
-    const val applicationId = "com.example.esportslogomaker"
+    const val applicationId = "com.esportlogo.gaminglogo"
 
     @JvmStatic
     val fileProvider: String = "${applicationId}.fileprovider"
