@@ -12,7 +12,6 @@ public class App extends MultiDexApplication {
         sInstance = this;
     }
 
-
     public static App getInstance() {
         return sInstance;
     }

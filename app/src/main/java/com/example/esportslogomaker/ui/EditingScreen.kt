@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.ContentValues
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
@@ -45,6 +46,7 @@ import com.example.esportslogomaker.customSticker.CustomImageView
 import com.example.esportslogomaker.datamodel.Root
 import com.example.esportslogomaker.recyclerAdapter.*
 import com.example.esportslogomaker.utils.Constant
+import com.example.esportslogomaker.utils.InAppReview
 import com.example.esportslogomaker.utils.MoveViewTouchListener
 import com.example.esportslogomaker.utils.Utils
 import com.example.logodesign.customDialog.ExportDialog
@@ -757,12 +759,13 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
         return filePath
     }
 
-    private fun savePdfFileToScopeStorage(view: View): String? {
+    @Suppress("DEPRECATION")
+    fun saveMediaToStorageJpg(bitmap: Bitmap): String? {
 
         var filePath: String? = null
 
         //Generating a file name
-        val filename = "pdf_${System.currentTimeMillis()}.pdf"
+        val filename = "img_${System.currentTimeMillis()}.jpg"
 
         //Output stream
         var fos: OutputStream? = null
@@ -772,26 +775,24 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
             //getting the contentResolver
             applicationContext?.contentResolver?.also { resolver ->
 
-                val dirDest = File(Utils.getRootPath(this, false), "pdf")
+                val dirDest = File(Utils.getRootPath(this, false), "img")
 
                 //Content resolver will process the contentValues
                 val contentValues = ContentValues().apply {
 
                     //putting file information in content values
                     put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-                    put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf")
+                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
                     put(MediaStore.MediaColumns.RELATIVE_PATH, "$dirDest")
                 }
 
                 //MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
                 //Inserting the contentValues to contentResolver and getting the Uri
                 // val imageUri: Uri? = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-
-                val imageUri: Uri? =
-                    resolver.insert(
-                        MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
-                        contentValues
-                    )
+                val imageUri: Uri? = resolver.insert(
+                    MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),
+                    contentValues
+                )
 
                 //Opening an outputStream with the Uri that we got
                 fos = imageUri?.let { resolver.openOutputStream(it) }
@@ -800,7 +801,7 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
         } else {
             //These for devices running on android < Q
             //So I don't think an explanation is needed here
-            val dirDest = File(Utils.getRootPath(this, false), "pdf")
+            val dirDest = File(Utils.getRootPath(this, false), "img")
             if (!dirDest.exists()) {
                 dirDest.mkdirs()
             }
@@ -816,69 +817,56 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
         fos?.use {
             //Finally writing the bitmap to the output stream that we opened
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
+            it.flush()
+            it.close()
 
-            val document = PdfDocument()
-            val pageInfo = PdfDocument.PageInfo.Builder(view.width, view.height, 1).create()
-            val page = document.startPage(pageInfo)
-
-            view.draw(page.canvas)
-            view.draw(page.canvas)
-            // finish the page
-            document.finishPage(page)
-
-            document.writeTo(it)
+            Log.e("myFileFos", "Saved to Photos Main")
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                filePath = saveImageInternalDirectoryPdf(view, filename)
+                filePath = saveImageInternalDirectoryJpg(bitmap, filename)
             }
-
         }
 
         return filePath
-
     }
 
-    private fun saveImageInternalDirectoryPdf(view: View, filename: String): String? {
+    //This method only call Android 10 and above
+    private fun saveImageInternalDirectoryJpg(bitmap: Bitmap, filename: String): String? {
 
         var filePath: String? = null
 
-        val dirDest = File(Utils.getRootPath(this, true), "pdf")
+        //Output stream
+        var fos: OutputStream? = null
+
+        val dirDest = File(Utils.getRootPath(this, true), "img")
         if (!dirDest.exists()) {
             dirDest.mkdirs()
         }
         val image = File(dirDest, filename)
 
-        Log.e("myFilePath", "$image")
-
         try {
-            filePath = image.toString()
-
-        } catch (ex: java.lang.Exception) {
+            fos = FileOutputStream(image)
+        } catch (ex: FileNotFoundException) {
             ex.printStackTrace()
         }
 
-        //Output stream
-        val fos: OutputStream? = FileOutputStream(image)
-
-        @Suppress("UNNECESSARY_SAFE_CALL")
-        fos?.use {
+        @Suppress("SENSELESS_COMPARISON")
+        if (fos != null) {
             //Finally writing the bitmap to the output stream that we opened
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+            fos.flush()
+            fos.close()
 
-            val document = PdfDocument()
-            val pageInfo = PdfDocument.PageInfo.Builder(view.width, view.height, 1).create()
-            val page = document.startPage(pageInfo)
+            Log.e("myFileFos", "Saved to Photos Android 10 and above")
 
-            view.draw(page.canvas)
-            view.draw(page.canvas)
-            // finish the page
-            document.finishPage(page)
+            filePath = image.toString()
 
-            document.writeTo(it)
-
+        } else {
+            Log.e("myFOS", "FOS is null")
         }
 
         return filePath
-
     }
 
     private fun showAnimation() {
@@ -1016,10 +1004,10 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
     override fun onBackPressed() {
         //super.onBackPressed()
-        if (savingRootPreview?.visibility == View.VISIBLE){
+        if (savingRootPreview?.visibility == View.VISIBLE) {
             showAnimation()
             savingRootPreview?.visibility = View.GONE
-        }else{
+        } else {
             showBackDialog()
         }
     }
@@ -1098,6 +1086,13 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
                                 }
                             }
 
+                            if (getSharedPreferences("inAppReview") == "0") {
+                                InAppReview.startInAppReview(this@EditingScreen)
+                                setSharedPreferences("inAppReview", "1")
+                            } else {
+                                Log.d("myInAppReview", "in_App_review_done")
+                            }
+
                         } catch (ex: java.lang.Exception) {
                             ex.printStackTrace()
                         }
@@ -1139,7 +1134,7 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
     private fun saveImageAsPdf() {
 
-        if (savingPreviewImage != null) {
+        if (savingBitmapPreview != null) {
 
             if (!this@EditingScreen.isFinishing && dialog != null) {
                 dialog!!.show()
@@ -1147,7 +1142,7 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
 
             workerThread.execute {
 
-                val saveFilePath: String? = savePdfFileToScopeStorage(savingPreviewImage!!)
+                val saveFilePath: String? = saveMediaToStorageJpg(savingBitmapPreview!!)
 
                 if (saveFilePath != null && File(saveFilePath).exists()) {
 
@@ -1160,6 +1155,13 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
                                 if (dialog!!.isShowing) {
                                     dialog!!.dismiss()
                                 }
+                            }
+
+                            if (getSharedPreferences("inAppReview") == "0") {
+                                InAppReview.startInAppReview(this@EditingScreen)
+                                setSharedPreferences("inAppReview", "1")
+                            } else {
+                                Log.d("myInAppReview", "in_App_review_done")
                             }
 
                         } catch (ex: java.lang.Exception) {
@@ -2328,5 +2330,22 @@ class EditingScreen : AppCompatActivity(), CustomImageView.CustomImageCallBack,
             val tf = Typeface.createFromAsset(assets, "font/$fontName")
             it.typeface = tf
         }
+    }
+
+    private fun getSharedPreferences(keyShare: String): String {
+        val prefs: SharedPreferences = getSharedPreferences("esportslogomaker", MODE_PRIVATE)
+        val keyVal = prefs.getString(keyShare, "0") //"No name defined" is the default value.
+        return keyVal.toString()
+    }
+
+    @SuppressLint("ApplySharedPref")
+    fun setSharedPreferences(keyShare: String, values: String) {
+        val editor: SharedPreferences.Editor = getSharedPreferences(
+            "esportslogomaker",
+            MODE_PRIVATE
+        ).edit()
+        editor.putString(keyShare, values)
+        editor.apply()
+        editor.commit()
     }
 }

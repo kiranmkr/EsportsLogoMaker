@@ -1,7 +1,9 @@
 package com.example.esportslogomaker.ui
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,6 +17,7 @@ import com.example.esportslogomaker.customCallBack.TemplateClickCallBack
 import com.example.esportslogomaker.databinding.ActivityMainBinding
 import com.example.esportslogomaker.utils.Constant
 import com.example.esportslogomaker.utils.FeedbackUtils
+import com.example.esportslogomaker.utils.InAppReview
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -34,19 +37,28 @@ class MainActivity : AppCompatActivity(), TemplateClickCallBack,
         }
 
         mainBinding.navigationView.setNavigationItemSelectedListener {
+
             when (it.itemId) {
                 R.id.nav_rate_us -> {
-                    try {
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW, Uri
-                                    .parse("market://details?id=" + Constant.applicationId)
-                            )
-                        )
-                    } catch (ex: Exception) {
-                        ex.printStackTrace()
 
+                    if (getSharedPreferences("inAppReview") == "0") {
+                        InAppReview.startInAppReview(this@MainActivity)
+                        setSharedPreferences("inAppReview", "1")
+                    } else {
+
+                        try {
+                            startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW, Uri
+                                        .parse("market://details?id=" + Constant.applicationId)
+                                )
+                            )
+                        } catch (ex: Exception) {
+                            ex.printStackTrace()
+
+                        }
                     }
+
                 }
                 R.id.nav_contact_us -> {
                     FeedbackUtils.startFeedbackEmail(this@MainActivity)
@@ -140,6 +152,23 @@ class MainActivity : AppCompatActivity(), TemplateClickCallBack,
         workerHandler.post {
             mainBinding.homeUi.updateUI(this@MainActivity)
         }
+    }
+
+    private fun getSharedPreferences(keyShare: String): String {
+        val prefs: SharedPreferences = getSharedPreferences("esportslogomaker", MODE_PRIVATE)
+        val keyVal = prefs.getString(keyShare, "0") //"No name defined" is the default value.
+        return keyVal.toString()
+    }
+
+    @SuppressLint("ApplySharedPref")
+    fun setSharedPreferences(keyShare: String, values: String) {
+        val editor: SharedPreferences.Editor = getSharedPreferences(
+            "esportslogomaker",
+            MODE_PRIVATE
+        ).edit()
+        editor.putString(keyShare, values)
+        editor.apply()
+        editor.commit()
     }
 
     override fun onBackPressed() {
