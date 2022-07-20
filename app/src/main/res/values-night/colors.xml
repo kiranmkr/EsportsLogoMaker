@@ -9,6 +9,7 @@
 
     <color name="daynight_item_background">#000000</color>
 
+    <color name="splas_bg_color">#E2D9D9</color>
 
     <color name="red_100">#F44336</color>
     <color name="red_300">#3F51B5</color>
