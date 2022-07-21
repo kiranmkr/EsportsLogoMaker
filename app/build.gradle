@@ -5,8 +5,6 @@ plugins {
 
 android {
 
-
-    //D:\EsportsLogoMaker\app
     signingConfigs {
         config {
             storeFile file('D:\\EsportsLogoMaker\\app\\esportlogo.jks')
